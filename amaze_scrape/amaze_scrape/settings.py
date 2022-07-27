@@ -9,41 +9,37 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import os
 import environ
-import djongo
+import os
 from pathlib import Path
-import mongoengine
-mongoengine.connect(db='amaze_scrape', host='localhost', username='username', password='pwd')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+env = environ.Env()
+environ.Env.read_env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 # Application definition
 
 INSTALLED_APPS = [
     'main_app',
-    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.admindocs',
 ]
 
 MIDDLEWARE = [
@@ -77,12 +73,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'amaze_scrape.wsgi.application'
 
 
+# Database
+# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
 DATABASES = {
-        'default': {
-            'ENGINE': 'djongo',
-            'NAME': 'amaze_scrape',
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'amaze_scrape',
+        'USER': 'myappuser',
+        'PASSWORD' : 'mypass',
+        'HOST': 'localhost',
+        'PORT' : 5432
+    }
 }
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -124,6 +129,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-environ.Env()
-environ.Env.read_env()
