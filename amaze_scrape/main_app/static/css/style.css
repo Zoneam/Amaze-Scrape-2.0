@@ -1,0 +1,325 @@
+body{
+    background-color:rgb(199, 199, 199);
+}
+
+main {
+    font-family: "Gill Sans Extrabold", sans-serif;
+    font-size: 18px;
+    color:
+    #1d1d1d;
+}
+
+#container-main{
+    margin-top: 40px;
+}
+
+.initial-class{
+    position : initial;
+}
+
+.enlarge-class{
+    position: fixed;
+    left : 50%;
+    top : 50%;
+    transform : translate(-50%, -50%);
+}
+
+.navbar-collapse.in {
+    display: block !important;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  white-space: nowrap;
+    font-size:20px;
+    color:#ffe7bc;
+}
+
+
+.navbar-brand{
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 2.5em !important;
+    color:rgb(255, 181, 95)!important;
+    padding-left: 0 !important;
+    text-shadow: 2px 2px 2px
+#1d1d1d;
+}
+
+.navbar{
+    -webkit-box-shadow: 0px 7px 23px 5px 
+    #1d1d1d; 
+    box-shadow: 0px 7px 23px 5px 
+    #1d1d1d;
+    font-family: 'Delius Unicase', cursive;
+    border-radius: 0 0 10px 10px;
+}
+
+.navbar-brand:hover{
+    text-shadow: 0px 6px 12px 
+    #1d1d1d;
+    transition: text-shadow 0.3s ease-in-out;
+
+}
+
+
+.navbar .navbar-nav .nav-link:hover {
+    background-color: #ffe79d;
+    color: 
+    #1d1d1d;
+    border-radius: 5px;
+}  
+
+
+.navbar .navbar-nav .nav-link {
+    padding: 0.6em;
+    font-size: 1.2em;
+    transition: all 0.5s;
+}
+
+.navbar .navbar-brand {
+    padding: 0 0.6em;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar-brand:not(:hover){
+    transition: text-shadow 0.3s ease-in-out;
+}
+
+.lottie-wrapper{
+    position: relative;
+}
+#photographers-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.profile-wrapper{
+    width: 250px !important;
+    margin: 23px !important;
+    background-color: whitesmoke;
+    
+}
+.table-responsive {
+  border-radius: 5px;
+}
+#transaction-card, #booking-card{
+  background-color: rgba(85, 85, 85, 0.528);
+  border-radius: 5px;
+}
+#equip-card{
+  background-color: rgba(221, 221, 221, 0.717);
+  border-radius: 5px;
+}
+
+#transaction-table, #booking-table{
+  background-color: rgba(221, 221, 221, 0.717);
+  box-shadow: 4px 5px 9px #1d1d1d;
+  border-radius: 5px;
+}
+.btn-warning, .btn-primary{
+  background-color: rgba(255, 180, 95, 0.512);
+  border-color: rgba(255, 180, 95, 0.512);
+  box-shadow: 4px 5px 9px #1d1d1d;
+  color: #1d1d1d;
+}
+.btn-primary:hover{
+  background-color:rgb(255, 181, 95);
+  border-color:rgb(255, 181, 95);
+}
+.card-body{
+  padding: 20px;
+}
+.booking-button, .update-booking{
+  background-color: rgba(255, 180, 95, 0.512);
+  box-shadow:4px 5px 9px #1d1d1d;
+  width:100% !important;
+}
+.delete-booking{
+  box-shadow: 4px 5px 9px #1d1d1d;
+  width:100% !important;
+  background-color: rgba(221, 221, 221, 0.717);
+  border-color: #1d1d1d;
+  margin-top: 15px;
+}
+.ex-booking-button{
+  background-color: #1d1d1d36;
+  box-shadow: 4px 5px 9px #1d1d1d;
+  width:100% !important;
+}
+.transaction-icon, .booking-icon{
+  color: rgba(228, 147, 56, 0.861);
+}
+.transaction-icon:hover, .booking-icon:hover{
+  color: #1d1d1d;
+}
+.add-equip-btn{
+  background-color: rgba(255, 180, 95, 0.512);
+  color: #1d1d1d;
+  box-shadow: 4px 5px 9px #1d1d1d;
+  border-radius: 5px;
+}
+.add-equip-btn:hover{
+  background-color: rgba(228, 147, 56, 0.861);
+  color: #1d1d1d;
+}
+.my-equip-btn{
+  background-color: rgba(228, 147, 56, 0.861);
+  color: #1d1d1d;
+  box-shadow:4px 5px 9px #1d1d1d;
+  border-radius: 5px;
+}
+.my-equip-btn:hover{
+  background-color: #555;
+  color: whitesmoke;
+}
+.col-md-3.mt-1.time{
+  background-color: rgba(255, 180, 95, 0.512);
+  justify-content: center;
+  color: #1d1d1d;
+  display: flex;
+  align-items: center;
+  font-size: 1.5em;
+  flex-wrap: wrap;
+  border-radius: 5px;
+  box-shadow: 0px 4px 10px
+  #1d1d1d;
+  max-width: 20%;
+}
+.detail-card{
+  background-color: rgba(85, 85, 85, 0.528);
+  border-radius: 5px;
+  box-shadow: 4px 5px 9px #1d1d1d;
+}
+.expired-booking{
+  color:  #e30000;
+  text-transform: uppercase;
+  text-shadow:-1px -1px 1px rgb(255 255 255 / 40%), 1px 1px 1px rgb(0 0 0 / 70%)
+}
+.btn-outline-dark{
+  box-shadow: 4px 5px 9px #1d1d1d;
+  background-color: rgba(221, 221, 221, 0.717);
+}
+#container-main > div > div > div > div > div.col-md-6.mt-1{
+  justify-content: center;
+  text-align: left;
+}
+.update-delete-trans{
+  width: 80%;
+}
+@media only screen and (min-width: 992px) {
+  .navbar {
+    padding: 0;
+  }
+  .navbar .navbar-nav .nav-link {
+    padding: 1em 0.7em;
+  }
+  .navbar .navbar-brand {
+    padding: 0 0.8em;
+  }
+}
+
+.info-div{
+  padding : 0 20px 20px 30px;
+}
+ 
+.social-link {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    border-radius: 50%;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+  }
+  
+.social-link:hover,
+.social-link:focus {
+    background: #ddd;
+    text-decoration: none;
+    color: #555;
+  }
+  
+  .progress {
+    height: 10px;
+  }
+  
+.info-span{
+  color:black;
+  float:right;
+}
+
+
+.save-btn-wrapper{
+    display:flex;
+    float: right;
+}
+
+.save-btn{
+    margin-top: 10px;
+    float: right;
+    background-color:rgb(255, 181, 95)!important;
+    box-shadow: 4px 5px 9px #1d1d1d;
+}
+
+.paginator-wrapper{
+  display: flex;
+  justify-content: center;
+}
+
+.fileUpload {
+	position: relative;
+	overflow: hidden;
+	margin: 10px;
+}
+.fileUpload input.upload {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 20px;
+	cursor: pointer;
+	opacity: 0;
+	filter: alpha(opacity=0);
+}
+
+.fa-circle-info{
+  float:left !important;
+  text-shadow:-1px -1px 1px rgb(255 255 255 / 40%), 1px 1px 1px rgb(0 0 0 / 70%)
+}
+
+.fa-edit,.fa-trash-alt {
+  text-shadow:-1px -1px 1px rgb(255 255 255 / 40%), 1px 1px 1px rgb(0 0 0 / 70%)
+
+}
+
+.fa-trash-alt{
+  color: #e30000;
+}
+
+.thumbnail {
+  display:flex !important;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: flex-end
+}
+
+.delete-image{
+ width:26px;
+ background-color: #c8a47e;
+  position: relative;
+  text-align: center;
+  color:#cc0000;
+  top: 35px;
+  right: -24px;
+  border-radius: 71%;
+  padding: 0;
+  -webkit-box-shadow: 0px 0px 8px 3px #ffbb0f; 
+  box-shadow: 0px 0px 4px 3px #302a2a81;
+
+}

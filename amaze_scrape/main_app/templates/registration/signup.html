@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} 
+{% block content %}
+
+<h1>Sign Up</h1>
+
+{% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
+
+<form method="post" action="{% url 'signup' %}">
+  {% csrf_token %}
+  {{ form|crispy  }}
+  <input type="submit" class="btn save-btn" value="Sign Up">
+</form>
+
+{% endblock %}
