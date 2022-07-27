@@ -18,6 +18,6 @@ from . import views
 
 urlpatterns = [
     # Main page routes
-    # path('', views.bookings, name='bookings'),
-    # path('accounts/signup/', views.signup, name='signup'),
+    path('', views.index, name='index'),
+    path('accounts/signup/', views.signup, name='signup'),
 ]
