@@ -18,7 +18,7 @@ from django.db.models import Sum
 from django.http import HttpResponse
 
 
-def index(request):
+def search(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
 def signup(request):
@@ -32,10 +32,20 @@ def signup(request):
             user = form.save()
             # This is how we log a user in via code
             login(request, user)
-            return redirect('index')
+            return redirect('myaccount/')
         else:
             error_message = 'Invalid sign up - try again'
     # A bad POST or a GET request, so render signup.html with an empty form
     form = UserCreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
+
+def search(request):
+    return render(request, 'search.html')
+
+
+
+def search_query(request):
+    queryset = request.GET.get("search")
+    print(queryset)
+    return render(request, 'search.html')

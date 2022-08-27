@@ -31,7 +31,7 @@ main {
 .navbar-light .navbar-nav .nav-link {
   white-space: nowrap;
     font-size:20px;
-    color:#ffe7bc;
+    color:#bcc7ff;
 }
 
 
@@ -39,7 +39,7 @@ main {
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
     font-size: 2.5em !important;
-    color:rgb(255, 181, 95)!important;
+    color:rgb(116, 95, 255)!important;
     padding-left: 0 !important;
     text-shadow: 2px 2px 2px
 #1d1d1d;
@@ -63,7 +63,7 @@ main {
 
 
 .navbar .navbar-nav .nav-link:hover {
-    background-color: #ffe79d;
+    background-color: #9daaff;
     color: 
     #1d1d1d;
     border-radius: 5px;
