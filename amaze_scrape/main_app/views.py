@@ -2,6 +2,14 @@ import os
 import uuid
 # from datetime import date
 from django.shortcuts import render, redirect
+# import requests
+# from bs4 import BeautifulSoup
+# from selenium import webdriver
+# from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+import time
 # from django.http import HttpResponseRedirect
 # from django.dispatch import receiver
 # from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -16,6 +24,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Sum
 # Create your views here.
 from django.http import HttpResponse
+HEADERS = ({"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0", "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"})
+
+URL = "https://www.amazon.com/Sony-PlayStation-Pro-1TB-Console-4/dp/B07K14XKZH/"
 
 
 def search(request):
@@ -47,5 +58,13 @@ def search(request):
 
 def search_query(request):
     queryset = request.GET.get("search")
-    print(queryset)
+    options = Options()
+    options.headless = True
+    driver = webdriver.Chrome(options=options)
+    driver.get('https://www.amazon.com/Sony-PlayStation-Pro-1TB-Console-4/dp/B07K14XKZH/')
+    print(driver.title)
+    time.sleep(5)
+    
+    driver.close()
     return render(request, 'search.html')
+

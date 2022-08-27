@@ -1,14 +1,16 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <h1>Search For Products</h1>
 
-
-
-<form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'search_query' %}" >
-            <input class="form-control mr-sm-2" type="search" name="search">
-            <button class="btn btn btn-outline-info my-2 my-sm-0" type="submit"> Search </button>
-        </form>
+<form
+  class="form-inline my-2 my-lg-0"
+  method="GET"
+  action="{% url 'search_query' %}"
+>
+  <input class="form-control mr-sm-2" type="search" name="search" />
+  <button class="btn btn btn-outline-info my-2 my-sm-0" type="submit">
+    Search
+  </button>
+</form>
 
 {% endblock %}
