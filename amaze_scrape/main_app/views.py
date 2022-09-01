@@ -54,24 +54,16 @@ def signup(request):
 def search(request):
     return render(request, 'search.html')
 
-def interceptor(request):
-    del request.headers['Referer']  # Delete the header first
-    request.headers['Referer'] = HEADERS  # Add the header back
-
-
-
 def search_query(request):
     queryset = request.GET.get("search")
     productResults = {}
     options = Options()
     options.headless = True
     driver = webdriver.Chrome(options=options)
-    # Set the interceptor on the driver
-    driver.request_interceptor = interceptor
+
 
     driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
     soup = BeautifulSoup(driver.page_source, 'html.parser')
-    print(soup)
     raw_results = soup.find_all( class_ = "s-asin")
     for result in raw_results:
         print(result.find('span', class_ = "a-text-normal").text)
