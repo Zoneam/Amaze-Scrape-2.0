@@ -3,9 +3,9 @@ import uuid
 # from datetime import date
 from django.shortcuts import render, redirect
 # import requests
-# from bs4 import BeautifulSoup
-# from selenium import webdriver
-# from selenium.webdriver.chrome.options import Options
+from bs4 import BeautifulSoup
+import re
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -54,17 +54,37 @@ def signup(request):
 def search(request):
     return render(request, 'search.html')
 
+def interceptor(request):
+    del request.headers['Referer']  # Delete the header first
+    request.headers['Referer'] = HEADERS  # Add the header back
+
 
 
 def search_query(request):
     queryset = request.GET.get("search")
+    productResults = {}
     options = Options()
     options.headless = True
     driver = webdriver.Chrome(options=options)
-    driver.get('https://www.amazon.com/Sony-PlayStation-Pro-1TB-Console-4/dp/B07K14XKZH/')
-    print(driver.title)
-    time.sleep(5)
-    
+    # Set the interceptor on the driver
+    driver.request_interceptor = interceptor
+
+    driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    print(soup)
+    raw_results = soup.find_all( class_ = "s-asin")
+    for result in raw_results:
+        print(result.find('span', class_ = "a-text-normal").text)
+        print(result.find('img', class_ = "s-image").text)
+        print(result.find('span', class_ = "a-price-whole"), result.find('span', class_ = "a-price-fraction"))
+        print(result.find('a', class_ = "a-link-normal").get('href'))
+        # print(result.find('span', class_ = "a-text-normal").text)
+        # print(result.find('span', class_ = "a-text-normal").text)
+        # print(result.find('span', class_ = "a-text-normal").text)
+        print('------------------------------')
+    # print(span)
+    # time.sleep(5)
+    # print (len(span))
     driver.close()
     return render(request, 'search.html')
 
