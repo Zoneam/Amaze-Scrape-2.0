@@ -72,7 +72,7 @@ def search_query(request):
         print(result.find('a', class_ = "a-link-normal").get('href'))
         print(result.find('span', class_ = "a-text-normal").text)
         print(result.find('span', class_ = "a-text-normal").text)
-        # print(result.find('span', class_ = "a-text-normal").text)
+        print(result.find('span', class_ = "a-text-normal").text)
         print('------------------------------')
     # print(span)
     # time.sleep(5)
