@@ -61,18 +61,17 @@ def search_query(request):
     options.headless = True
     driver = webdriver.Chrome(options=options)
 
-
     driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     raw_results = soup.find_all( class_ = "s-asin")
     for result in raw_results:
         print(result.find('span', class_ = "a-text-normal").text)
         print(result.find('img', class_ = "s-image").text)
-        print(result.find('span', class_ = "a-price-whole"), result.find('span', class_ = "a-price-fraction"))
+        print(f"{result.find('span', class_ = 'a-price-whole').text}{result.find('span', class_ = 'a-price-fraction').text}")
         print(result.find('a', class_ = "a-link-normal").get('href'))
         print(result.find('span', class_ = "a-text-normal").text)
-        print(result.find('span', class_ = "a-text-normal").text)
-        print(result.find('span', class_ = "a-text-normal").text)
+        # print(result.find('span', class_ = "a-text-normal").text)
+        # print(result.find('span', class_ = "a-text-normal").text)
         print('------------------------------')
     # print(span)
     # time.sleep(5)
