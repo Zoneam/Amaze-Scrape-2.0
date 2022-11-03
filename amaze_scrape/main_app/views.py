@@ -24,7 +24,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Sum
 # Create your views here.
 from django.http import HttpResponse
-HEADERS = ({"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0", "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"})
+HEADERS = ({"Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0"})
 
 URL = "https://www.amazon.com/Sony-PlayStation-Pro-1TB-Console-4/dp/B07K14XKZH/"
 
@@ -64,15 +64,21 @@ def search_query(request):
     driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     raw_results = soup.find_all( class_ = "s-asin")
-    for result in raw_results:
-        print(result.find('span', class_ = "a-text-normal").text)
-        print(result.find('img', class_ = "s-image").text)
-        print(f"{result.find('span', class_ = 'a-price-whole').text}{result.find('span', class_ = 'a-price-fraction').text}")
-        print(result.find('a', class_ = "a-link-normal").get('href'))
-        print(result.find('span', class_ = "a-text-normal").text)
-        # print(result.find('span', class_ = "a-text-normal").text)
-        # print(result.find('span', class_ = "a-text-normal").text)
-        print('------------------------------')
+    if raw_results:
+        for idx,result in enumerate(raw_results):
+            # print(result)
+            print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
+            # print(result.find('span', class_ = "a-text-normal").text)
+            # print(result.find('img', class_ = "s-image").text)
+            msg = result.find('span', class_ = 'a-price-whole').text if result.find('span', class_ = 'a-price-whole') is not None else 'NO RESULT' + result.find('span', class_ = 'a-price-fraction').text if result.find('span', class_ = 'a-price-fraction') is not None else 'No Result'
+            print (msg)
+            # result.find('span', class_ = 'a-price-fraction').text if result.find('span', class_ = 'a-price-fraction') else 'No Result'
+            # print(result.find('a', class_ = "a-link-normal").get('href'))
+            # print(result.find('span', class_ = "a-text-normal").text)
+            # print(result.find('span', class_ = "a-text-normal").text)
+            # print(result.find('span', class_ = "a-text-normal").text)
+    else:
+        print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
     # print(span)
     # time.sleep(5)
     # print (len(span))
