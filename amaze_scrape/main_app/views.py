@@ -81,10 +81,8 @@ def search_query(request):
         raw_results = soup.find_all( class_ = "s-asin")
         if raw_results:
             for idx,result in enumerate(raw_results):
-                print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
-               
+                # print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
                 title = result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal").text if result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal") is not None else ''
-
                 whole = result.find('span', class_ = 'a-price-whole').text if result.find('span', class_ = 'a-price-whole') is not None else ''
                 fraction = result.find('span', class_ = 'a-price-fraction').text if result.find('span', class_ = 'a-price-fraction') is not None else ''
                 imgLink = result.find('img', class_ = "s-image")['src'] if result.find('img', class_ = "s-image") is not None else ''
@@ -96,13 +94,8 @@ def search_query(request):
                     'link': link,
                 }
                 productResults.append(productResult)
-                print(result.find('img', class_ = "s-image"))
         else:
             print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
     driver.close()
     return render(request, 'search.html', {'productResults': productResults})
 
-    # a-size-base-plus a-color-base a-text-normal
-    # a-size-mini a-spacing-none a-color-base s-line-clamp-4
-    # a-size-base-plus a-color-base a-text-normal
-    # a-size-base-plus a-color-base a-text-normal

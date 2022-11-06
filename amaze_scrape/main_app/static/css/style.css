@@ -348,9 +348,12 @@ main {
 }
 
 .price{
-  background-color: #dd8e0da6;
+  background-color: #b4dd0da6;
   color: #000000d4;
   font-weight: bold;
+  padding: 0 18px;
+  border-radius: 15px;
+  width: fit-content;
 }
 
 .card-content{

@@ -21,11 +21,17 @@
   {% for product in productResults %}
     <div class="card">
       <div class="card-content">
-        <a href="https://amazon.com/{{ product.link }}">
+        <a target="_blank" href="https://amazon.com/{{ product.link }}">
           <div class="inner-card">
           <img class="product-image" src="{{ product.imgLink }}" alt="{{ product.title }}" />
-          <p class="card-title">{{ product.title }}</p>
-          <span class="card-title price">{{ product.price }}</span>
+          <p class="card-title">
+            {% if product.title|length < 40 %} 
+              {{ product.title }}
+              {% else %}
+              {{ product.title|slice:":40" }}...  
+            {% endif %}
+            </p>
+          <span class="card-title price">price: {{ product.price }}</span>
           </div>
         </a>
       </div>
