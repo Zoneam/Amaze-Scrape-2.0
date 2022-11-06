@@ -21,10 +21,13 @@ from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth.models import User
 # from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from django.db.models import Sum
 # Create your views here.
 from django.http import HttpResponse
-HEADERS = ({"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100102 Firefox/66.0", "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"})
+HEADERS = ({"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100102 Firefox/66.0", "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"})
 
 def search(request):
     return HttpResponse("Hello, world. You're at the index.")
@@ -57,38 +60,49 @@ def interceptor(request):
 
 
 def search_query(request):
+
     queryset = request.GET.get("search")
-    productResults = {}
+    productResults = []
     options = Options()
+    options.add_argument("--incognito")
     options.headless = True
     driver = webdriver.Chrome(options=options)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
     driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
+    # driver.get(f'https://www.walmart.com/search?q={queryset}')
+
     soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+    # foundAsBot =  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "buy-now-button")))
     if soup.find('title').text == 'Sorry! Something went wrong!':
         print('\033[48;5;225m\033[38;5;245m Sorry! Something went wrong! \033[0;0m')
     else:
         raw_results = soup.find_all( class_ = "s-asin")
         if raw_results:
             for idx,result in enumerate(raw_results):
-                # print(result)
                 print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
-                # print(result.find('span', class_ = "a-text-normal").text)
-                # print(result.find('img', class_ = "s-image").text)
+               
+                title = result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal").text if result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal") is not None else ''
+
                 whole = result.find('span', class_ = 'a-price-whole').text if result.find('span', class_ = 'a-price-whole') is not None else ''
                 fraction = result.find('span', class_ = 'a-price-fraction').text if result.find('span', class_ = 'a-price-fraction') is not None else ''
-                print (f"${whole}{fraction}")
-                # result.find('span', class_ = 'a-price-fraction').text if result.find('span', class_ = 'a-price-fraction') else 'No Result'
-                # print(result.find('a', class_ = "a-link-normal").get('href'))
-                # print(result.find('span', class_ = "a-text-normal").text)
-                # print(result.find('span', class_ = "a-text-normal").text)
-                # print(result.find('span', class_ = "a-text-normal").text)
+                imgLink = result.find('img', class_ = "s-image")['src'] if result.find('img', class_ = "s-image") is not None else ''
+                link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
+                productResult = {
+                    'price': f"${whole}{fraction}",
+                    'title': title,
+                    'imgLink': imgLink,
+                    'link': link,
+                }
+                productResults.append(productResult)
+                print(result.find('img', class_ = "s-image"))
         else:
             print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
-        # print(span)
-        # time.sleep(5)
-        # print (len(span))
     driver.close()
-    return render(request, 'search.html')
+    return render(request, 'search.html', {'productResults': productResults})
 
+    # a-size-base-plus a-color-base a-text-normal
+    # a-size-mini a-spacing-none a-color-base s-line-clamp-4
+    # a-size-base-plus a-color-base a-text-normal
+    # a-size-base-plus a-color-base a-text-normal
