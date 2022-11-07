@@ -73,6 +73,7 @@ def search_query(request):
     # driver.get(f'https://www.walmart.com/search?q={queryset}')
 
     soup = BeautifulSoup(driver.page_source, 'html.parser')
+    return
     # print(soup)
     # foundAsBot =  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "buy-now-button")))
     if soup.find('title').text == 'Sorry! Something went wrong!':
