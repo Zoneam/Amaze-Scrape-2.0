@@ -73,16 +73,19 @@ def search_query(request):
     # driver.get(f'https://www.walmart.com/search?q={queryset}')
 
     soup = BeautifulSoup(driver.page_source, 'html.parser')
-
+    # print(soup)
     # foundAsBot =  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "buy-now-button")))
     if soup.find('title').text == 'Sorry! Something went wrong!':
         print('\033[48;5;225m\033[38;5;245m Sorry! Something went wrong! \033[0;0m')
     else:
         raw_results = soup.find_all( class_ = "s-asin")
+        # print(raw_results)
         if raw_results:
             for idx,result in enumerate(raw_results):
-                # print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
+                print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
                 title = result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal").text if result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal") is not None else ''
+                if not title:
+                    title = result.find('span', class_ = "a-size-medium a-color-base a-text-normal").text if result.find('span', class_ = "a-size-medium a-color-base a-text-normal") is not None else ''
                 whole = result.find('span', class_ = 'a-price-whole').text if result.find('span', class_ = 'a-price-whole') is not None else ''
                 fraction = result.find('span', class_ = 'a-price-fraction').text if result.find('span', class_ = 'a-price-fraction') is not None else ''
                 imgLink = result.find('img', class_ = "s-image")['src'] if result.find('img', class_ = "s-image") is not None else ''
