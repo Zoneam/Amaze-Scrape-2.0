@@ -10,32 +10,21 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 import time
-# from django.http import HttpResponseRedirect
-# from django.dispatch import receiver
-# from django.views.generic.edit import CreateView, UpdateView, DeleteView
-# from django.views.generic import ListView, DetailView
-# from .models import 
 from django.contrib.auth import login
-
 from django.contrib.auth.forms import UserCreationForm
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.contrib.auth.models import User
-# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from django.db.models import Sum
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 from django.http import HttpResponse
 HEADERS = ({"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100102 Firefox/66.0", "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"})
 
-def search(request):
-    return HttpResponse("Hello, world. You're at the index.")
-
 def signup(request):
+
     error_message = ''
     if request.method == 'POST':
         # This is how to create a 'user' form object
@@ -54,6 +43,7 @@ def signup(request):
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
 
+@login_required
 def search(request):
     return render(request, 'search.html')
 
@@ -61,7 +51,7 @@ def interceptor(request):
     del request.headers['Referer']  # Delete the header first
     request.headers['Referer'] = HEADERS
 
-@login_required
+
 def search_query(request):
     queryset = request.GET.get("search")
     if not queryset:
