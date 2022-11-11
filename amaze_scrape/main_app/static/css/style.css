@@ -354,6 +354,7 @@ main {
   width: fit-content;
   margin-bottom: 10px;
   margin-left: 10px;
+  padding: 6px
 }
 
 .card-content {

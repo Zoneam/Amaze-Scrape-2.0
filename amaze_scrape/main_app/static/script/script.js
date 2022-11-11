@@ -14,6 +14,4 @@ $( document ).ready(function() {
           element.classList.remove('swing'); 
   },        1000); 
     });
-    
-    
 }); 

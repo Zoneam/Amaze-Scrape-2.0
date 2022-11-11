@@ -16,6 +16,7 @@ import time
 # from django.views.generic import ListView, DetailView
 # from .models import 
 from django.contrib.auth import login
+
 from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.mixins import LoginRequiredMixin
@@ -25,6 +26,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from django.db.models import Sum
+
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.http import HttpResponse
 HEADERS = ({"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100102 Firefox/66.0", "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"})
@@ -43,7 +46,7 @@ def signup(request):
             user = form.save()
             # This is how we log a user in via code
             login(request, user)
-            return redirect('myaccount/')
+            return redirect('/search/')
         else:
             error_message = 'Invalid sign up - try again'
     # A bad POST or a GET request, so render signup.html with an empty form
@@ -58,10 +61,11 @@ def interceptor(request):
     del request.headers['Referer']  # Delete the header first
     request.headers['Referer'] = HEADERS
 
-
+@login_required
 def search_query(request):
-
     queryset = request.GET.get("search")
+    if not queryset:
+        return redirect('search')
     productResults = []
     options = Options()
     options.add_argument("--incognito")
@@ -71,9 +75,7 @@ def search_query(request):
     driver.request_interceptor = interceptor
     driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
     # driver.get(f'https://www.walmart.com/search?q={queryset}')
-
     soup = BeautifulSoup(driver.page_source, 'html.parser')
-    return
     # print(soup)
     # foundAsBot =  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "buy-now-button")))
     if soup.find('title').text == 'Sorry! Something went wrong!':
@@ -83,7 +85,7 @@ def search_query(request):
         # print(raw_results)
         if raw_results:
             for idx,result in enumerate(raw_results):
-                print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
+                # print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
                 title = result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal").text if result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal") is not None else ''
                 if not title:
                     title = result.find('span', class_ = "a-size-medium a-color-base a-text-normal").text if result.find('span', class_ = "a-size-medium a-color-base a-text-normal") is not None else ''
