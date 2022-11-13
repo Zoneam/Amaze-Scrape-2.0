@@ -154,10 +154,12 @@ def search_query(request):
                         'current': current,
                         'title': title,
                         'imgLink': imgLink,
+                        'discount': round((1 - (float(current[1:]) / float(was[1:]))) * 100, 2),
                         # 'link': link,
                     }
                     productResults.append(productResult)
         else:
             print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
     driver.close()
+    productResults = sorted(productResults, key=lambda k: k['discount'], reverse=True)
     return render(request, 'search.html', {'productResults': productResults})

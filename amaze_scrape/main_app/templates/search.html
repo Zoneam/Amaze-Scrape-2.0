@@ -39,7 +39,7 @@
 <div id="search-results">
   {% for product in productResults %}
   <div class="card">
-    <div class="card-content" >
+    <div class="card-content" title="{{product.title}}">
       <a target="_blank" href="#">
         <div class="inner-card">
           <img
@@ -52,7 +52,11 @@
               {% if product.title|length < 40 %} {{ product.title }} {% else %}
               {{ product.title|slice:":40" }}... {% endif %}
             </p>
-            <span class="price">was price: {{ product.was }}</span>
+            <div class="was-price">
+              <span class="price"
+                >was price: <span class="was">{{ product.was }}</span></span
+              ><span class="discount">-{{ product.discount }} %</span>
+            </div>
             <span class="price">currently: {{ product.current }}</span>
           </div>
         </div>

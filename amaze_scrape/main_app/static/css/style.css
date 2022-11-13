@@ -429,3 +429,18 @@ main {
 .toast.fade-hide {
   opacity: 0
 }
+
+.was {
+  text-decoration: line-through;
+}
+
+.was-price{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.discount {
+  margin-right: 15px;
+  color: chocolate;
+}
