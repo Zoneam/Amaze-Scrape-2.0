@@ -372,6 +372,7 @@ main {
 .product-image {
   align-self: center;
   margin-top: 20px;
+  width: 270px;
 }
 
 #spinner {
@@ -382,6 +383,8 @@ main {
 
 #title-wrapper {
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* brn style */
