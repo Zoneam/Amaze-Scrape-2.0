@@ -354,7 +354,7 @@ main {
   width: fit-content;
   margin-bottom: 10px;
   margin-left: 10px;
-  padding: 6px
+  padding: 6px;
 }
 
 .card-content {
@@ -372,6 +372,7 @@ main {
 .product-image {
   align-self: center;
   margin-top: 20px;
+  width: min-content;
 }
 
 #spinner {
@@ -382,47 +383,64 @@ main {
 
 #title-wrapper {
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* brn style */
 
 .btn {
-  margin-right: 0.5rem !important
+  margin-right: 0.5rem !important;
 }
 
 .btn {
   font-size: 0.875rem;
   line-height: 1;
   font-weight: 400;
-  padding: .7rem 1.5rem;
-  border-radius: 0.1275rem
+  padding: 0.7rem 1.5rem;
+  border-radius: 0.1275rem;
 }
 
 .container {
-  margin-top: 100px
+  margin-top: 100px;
 }
 
-.toast {
-  transition: 0.32s all ease-in-out
+.was {
+  text-decoration: line-through;
 }
 
-.toast-container--fade {
-  right: 0;
-  bottom: 0
+.was-price {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-.toast-container--fade .toast-wrapper {
-  display: inline-block
+.discount {
+  margin-right: 15px;
+  color: chocolate;
 }
 
-.toast.fade-init {
-  opacity: 0
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.toast.fade-show {
-  opacity: 1
+.strike-text {
+  text-decoration: line-through red;
 }
 
-.toast.fade-hide {
-  opacity: 0
+.product-discount-label{
+  color: #fff;
+  background: #78a206;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 5px;
+  position: absolute;
+  top: 12px;
+  left: 12px;
 }
+
+
