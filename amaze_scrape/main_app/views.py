@@ -20,8 +20,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 import threading
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-# Create your views here.
 from django.http import HttpResponse
+
 HEADERS = ({ 
       'user-agent': 'Mozilla/5.0 (Windows NT 16.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.132 Safari/537.36',
       'upgrade-insecure-requests': '1',
@@ -59,7 +59,7 @@ def interceptor(request):
     request.headers['Referer'] = HEADERS
 
 
-def search_query(request):
+def amazon_query(request):
     queryset = request.GET.get("search")
     if not queryset:
         return redirect('search')
@@ -114,7 +114,6 @@ def search_query(request):
     return render(request, 'amazon.html', {'productResults': productResults})
 
 def raleys_query(request):
-    print('Raleys')
     productResults = []
     options = Options()
     options.add_argument("--incognito")
@@ -154,3 +153,19 @@ def raleys_query(request):
     driver.close()
     productResults = sorted(productResults, key=lambda k: k['discount'], reverse=True)
     return render(request, 'raleys.html', {'productResults': productResults})
+
+def walmart_query(request):
+    print('walmart_query')
+    return HttpResponse('<h1>Walmart</h1>')
+
+def target_query(request):
+    return HttpResponse('Target')
+
+def safeway_query(request):
+    return HttpResponse('Safeway')
+
+def traderjoes_query(request):
+    return HttpResponse('Trader Joes')
+
+def wholefoods_query(request):
+    return HttpResponse('Whole Foods')

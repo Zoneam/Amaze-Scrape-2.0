@@ -430,7 +430,7 @@ main {
   text-decoration: line-through red;
 }
 
-.product-discount-label{
+.product-discount-label {
   color: #fff;
   background: #78a206;
   font-size: 14px;
@@ -443,4 +443,13 @@ main {
   left: 12px;
 }
 
+.loading-top {
+  align-items: center;
+}
 
+.stores-wrapper {
+  display: flex;
+  margin: 0 20px 10px 20px;
+  justify-content: space-between;
+  align-items: center;
+}
