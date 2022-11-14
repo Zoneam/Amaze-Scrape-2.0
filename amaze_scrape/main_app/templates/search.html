@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 
 <h1>Search For Products</h1>
-
+<a href="{% url 'raleys_query' %}">Raley's</a>
 <form
   class="form-inline my-2 my-lg-0"
   method="GET"
@@ -17,13 +17,7 @@
       placeholder="Search for products"
       aria-label="Search for products"
     />
-    <button
-      type="submit"
-      id="search"
-      class="btn btn-warning btn-icon-text animatebutton"
-    >
-      <i class="fa-solid fa-magnifying-glass"></i> Search
-    </button>
+      <button type="submit" id="search" class="btn btn-warning btn-icon-text animatebutton"> <i class="fa-solid fa-magnifying-glass"></i> Search </button> 
   </div>
 </form>
 
@@ -36,33 +30,7 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<div id="search-results">
-  {% for product in productResults %}
-  <div class="card">
-    <div class="card-content" title="{{product.title}}">
-      <a target="_blank" href="#">
-        <div class="inner-card">
-          <img
-            class="product-image"
-            src="{{ product.imgLink }}"
-            alt="{{ product.title }}"
-          />
-          <div id="title-wrapper">
-            <p class="card-title">
-              {% if product.title|length < 40 %} {{ product.title }} {% else %}
-              {{ product.title|slice:":40" }}... {% endif %}
-            </p>
-            <div class="was-price">
-              <span class="price"
-                >was price: <span class="was">{{ product.was }}</span></span
-              ><span class="discount">-{{ product.discount }} %</span>
-            </div>
-            <span class="price">currently: {{ product.current }}</span>
-          </div>
-        </div>
-      </a>
-    </div>
-  </div>
-  {% endfor %}
-</div>
+{% block amazon %} {% endblock %}
+{% block raleys %} {% endblock %}
+
 {% endblock %}

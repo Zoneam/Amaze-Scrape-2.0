@@ -17,7 +17,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from django.db.models import Sum
 from selenium.webdriver.common.action_chains import ActionChains
-
+import threading
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
@@ -59,65 +59,6 @@ def interceptor(request):
     request.headers['Referer'] = HEADERS
 
 
-# def search_query(request):
-#     queryset = request.GET.get("search")
-#     if not queryset:
-#         return redirect('search')
-#     productResults = []
-#     options = Options()
-#     options.add_argument("--incognito")
-#     options.headless = False
-#     driver = webdriver.Chrome(options=options)
-#     # Set the interceptor on the driver
-#     driver.request_interceptor = interceptor
-#     # driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
-#     # driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
-#     driver.get(f'https://shop.raleys.com/shop/categories/53')
-#     # -------------------- Walmart Block start --------------------
-#     # driver.get(f'https://www.walmart.com/search?q={queryset}')
-#     # action = ActionChains(driver)
-#     # holdBtn = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "px-captcha")))
-#     # action.click_and_hold(on_element = holdBtn)
-  
-#     # # perform the operation
-#     # action.perform()
-#     # time.sleep(15)
-#     # action.release(holdBtn)
-#     # action.perform()
-#     # time.sleep(3)
-#     # action.release(holdBtn)
-#     # -------------------- Walmart Block end --------------------
-#     soup = BeautifulSoup(driver.page_source, 'html.parser')
-#     print(soup)
-#     # foundAsBot =  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "buy-now-button")))
-#     # if soup.find('title').text == 'Sorry! Something went wrong!':
-#     #     print('\033[48;5;225m\033[38;5;24 driver
-#     # 5m Sorry! Something went wrong! \033[0;0m')
-#     # else:
-#     #     raw_results = soup.find_all( class_ = "s-asin")
-#     #     # print(raw_results)
-#     #     if raw_results:
-#     #         for idx,result in enumerate(raw_results):
-#     #             # print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
-#     #             title = result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal").text if result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal") is not None else ''
-#     #             if not title:
-#     #                 title = result.find('span', class_ = "a-size-medium a-color-base a-text-normal").text if result.find('span', class_ = "a-size-medium a-color-base a-text-normal") is not None else ''
-#     #             whole = result.find('span', class_ = 'a-price-whole').text if result.find('span', class_ = 'a-price-whole') is not None else ''
-#     #             fraction = result.find('span', class_ = 'a-price-fraction').text if result.find('span', class_ = 'a-price-fraction') is not None else ''
-#     #             imgLink = result.find('img', class_ = "s-image")['src'] if result.find('img', class_ = "s-image") is not None else ''
-#     #             link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
-#     #             productResult = {
-#     #                 'price': f"${whole}{fraction}",
-#     #                 'title': title,
-#     #                 'imgLink': imgLink,
-#     #                 'link': link,
-#     #             }
-#     #             productResults.append(productResult)
-#     #     else:
-#     #         print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
-#     driver.close()
-#     return render(request, 'search.html', {'productResults': productResults})
-
 def search_query(request):
     queryset = request.GET.get("search")
     if not queryset:
@@ -129,7 +70,59 @@ def search_query(request):
     driver = webdriver.Chrome(options=options)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
-    driver.get(f'https://shop.raleys.com/shop/categories/53?tags=on_sale')
+    driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
+    # -------------------- Walmart Block start --------------------
+    # driver.get(f'https://www.walmart.com/search?q={queryset}')
+    # action = ActionChains(driver)
+    # holdBtn = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "px-captcha")))
+    # action.click_and_hold(on_element = holdBtn)
+  
+    # # perform the operation
+    # action.perform()
+    # time.sleep(15)
+    # action.release(holdBtn)
+    # action.perform()
+    # time.sleep(3)
+    # action.release(holdBtn)
+    # -------------------- Walmart Block end --------------------
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    # foundAsBot =  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "buy-now-button")))
+    if soup.find('title').text == 'Sorry! Something went wrong!':
+        print('\033[48;5;225m\033[38;5;245m Sorry! Something went wrong! \033[0;0m')
+    else:
+        raw_results = soup.find_all( class_ = "s-asin")
+        if raw_results:
+            for idx,result in enumerate(raw_results):
+                print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
+                title = result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal").text if result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal") is not None else ''
+                if not title:
+                    title = result.find('span', class_ = "a-size-medium a-color-base a-text-normal").text if result.find('span', class_ = "a-size-medium a-color-base a-text-normal") is not None else ''
+                whole = result.find('span', class_ = 'a-price-whole').text if result.find('span', class_ = 'a-price-whole') is not None else ''
+                fraction = result.find('span', class_ = 'a-price-fraction').text if result.find('span', class_ = 'a-price-fraction') is not None else ''
+                imgLink = result.find('img', class_ = "s-image")['src'] if result.find('img', class_ = "s-image") is not None else ''
+                link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
+                productResult = {
+                    'price': f"${whole}{fraction}",
+                    'title': title,
+                    'imgLink': imgLink,
+                    'link': link,
+                }
+                productResults.append(productResult)
+        else:
+            print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
+    driver.close()
+    return render(request, 'amazon.html', {'productResults': productResults})
+
+def raleys_query(request):
+    print('Raleys')
+    productResults = []
+    options = Options()
+    options.add_argument("--incognito")
+    options.headless = True
+    driver = webdriver.Chrome(options=options)
+    # Set the interceptor on the driver
+    driver.request_interceptor = interceptor
+    driver.get(f'https://shop.raleys.com/shop/categories/52?tags=on_sale')
     WebDriverWait(driver,65).until(EC.visibility_of_element_located((By.ID, "content")))
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     # print(soup)
@@ -141,25 +134,23 @@ def search_query(request):
         if raw_results:
             for idx,result in enumerate(raw_results):
                 print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
-                if idx != 0:
-                    print(result.find('span', class_ = "cell-image")['data-src'])
-                    title = result.find('div', class_ = "cell-title-text").text if result.find('div', class_ = "cell-title-text") is not None else ''
-                    was = result.find('span', class_ = 'css-hhuz2w').text if result.find('span', class_ = 'css-hhuz2w') is not None else ''
-                    current = result.find('span', class_ = 'css-os8wsm').text if result.find('span', class_ = 'css-os8wsm') is not None else ''
-                    imgLink = result.find('span', class_ = "cell-image")['data-src'] if result.find('span', class_ = "cell-image") is not None else ''
-                    print('------>>>>>')
-                    # link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
-                    productResult = {
-                        'was': f"{was}",
-                        'current': current,
-                        'title': title,
-                        'imgLink': imgLink,
-                        'discount': round((1 - (float(current[1:]) / float(was[1:]))) * 100, 2),
-                        # 'link': link,
-                    }
-                    productResults.append(productResult)
+                title = result.find('div', class_ = "cell-title-text").text if result.find('div', class_ = "cell-title-text") is not None else ''
+                was = result.find('span', class_ = 'css-hhuz2w').text if result.find('span', class_ = 'css-hhuz2w') is not None else ''
+                current = result.find('span', class_ = 'css-os8wsm').text if result.find('span', class_ = 'css-os8wsm') is not None else ''
+                imgLink = result.find('span', class_ = "cell-image")['data-src'] if result.find('span', class_ = "cell-image") is not None else ''
+                print('------>>>>>')
+                # link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
+                productResult = {
+                    'was': f"{was}",
+                    'current': current,
+                    'title': title,
+                    'imgLink': imgLink,
+                    'discount': round((1 - (float(current[1:]) / float(was[1:]))) * 100, 2),
+                    # 'link': link,
+                }
+                productResults.append(productResult)
         else:
             print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
     driver.close()
     productResults = sorted(productResults, key=lambda k: k['discount'], reverse=True)
-    return render(request, 'search.html', {'productResults': productResults})
+    return render(request, 'raleys.html', {'productResults': productResults})
