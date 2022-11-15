@@ -18,6 +18,7 @@ from selenium.webdriver.common.by import By
 from django.db.models import Sum
 from selenium.webdriver.common.action_chains import ActionChains
 import threading
+import re
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
@@ -154,18 +155,55 @@ def raleys_query(request):
     productResults = sorted(productResults, key=lambda k: k['discount'], reverse=True)
     return render(request, 'raleys.html', {'productResults': productResults})
 
-def walmart_query(request):
-    print('walmart_query')
-    return HttpResponse('<h1>Walmart</h1>')
-
-def target_query(request):
-    return HttpResponse('Target')
 
 def safeway_query(request):
-    return HttpResponse('Safeway')
+    productResults = []
+    options = Options()
+    options.add_argument("--incognito")
+    options.headless = True
+    driver = webdriver.Chrome(options=options)
+    # Set the interceptor on the driver
+    driver.request_interceptor = interceptor
+    driver.get(f'https://www.safeway.com/shop/deals/member-specials.html')
+    # WebDriverWait(driver,65).until(EC.visibility_of_element_located((By.ID, "apps-flyer-wrapper")))
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+    raw_results = soup.find_all( class_ = "product-item-inner")
+    # print(raw_results)
+    if raw_results:
+        for idx,result in enumerate(raw_results):
+            print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
+            title = result.find('a', class_ = "product-title").text if result.find('a', class_ = "product-title") is not None else ''
+            was = '.'.join(re.findall(r'\d+', result.find('span', class_ = 'product-strike-base-price').text)) if result.find('span', class_ = 'product-strike-base-price') is not None else ''
+            current = '.'.join(re.findall(r'\d+', result.find('span', class_ = 'product-price product-strike-price').text))  if result.find('span', class_ = 'product-price product-strike-price') is not None else ''
+            aTag = result.find('a') if result.find('a') is not None else ''
+            # link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
+            productResult = {
+                'was': was,
+                'current': current,
+                'title': title,
+                'imgLink': f'https://images.albertsons-media.com/is/image/ABS/{aTag["data-bpn"]}?$ecom-product-card-tablet-jpg$&defaultImage=Not_Available',
+                'discount': round((1 - (float(current) / float(was))) * 100, 2),
+                'link': f'https://www.safeway.com{aTag["href"]}',
+            }
+            print('-----------------------------------')
+            productResults.append(productResult)
+    else:
+        print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
+    driver.close()
+    productResults = sorted(productResults, key=lambda k: k['discount'], reverse=True)
+    return render(request, 'safeway.html', {'productResults': productResults})
+
+
+
+def walmart_query(request):
+    return HttpResponse('<h1>Under Construction</h1>')
+
+def target_query(request):
+    return HttpResponse('<h1>Under Construction</h1>')
 
 def traderjoes_query(request):
-    return HttpResponse('Trader Joes')
+    return HttpResponse('<h1>Under Construction</h1>')
 
 def wholefoods_query(request):
-    return HttpResponse('Whole Foods')
+    return HttpResponse('<h1>Under Construction</h1>')

@@ -1,0 +1,29 @@
+{% extends 'search.html' %} {% block raleys %}
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- List group-->
+        <ul class="list-group shadow">
+  {% for product in productResults %}
+            <!-- list group item-->
+            <a href='{{ product.link }}' target='_blank}'>
+            <li class="list-group-item my-2">
+                <!-- Custom content-->
+                <span class="product-discount-label">-{{ product.discount }} %</span>
+                <div class="media flex-column flex-lg-row wrapper" title="{{product.title}}">
+                  <img src="{{ product.imgLink }}" alt="Generic placeholder image" width="200" class="ml-lg-5">
+                    <div class="media-body">
+                        <h5 class="mt-0 font-weight-bold mb-2">
+                          {% if product.title|length < 50 %} {{ product.title }} {% else %}
+                          {{ product.title|slice:":50" }}... {% endif %}</h5>
+                        <div class="d-flex align-items-center justify-content-between mt-1">
+                          <h4 class="mr-1">Now: {{ product.current }}</h4><h6>Was: <span class="strike-text">{{  product.was }}</span></h6>
+                        </div>
+                    </div>
+                </div> <!-- End -->
+            </li> <!-- End -->
+            </a>
+  {% endfor %}
+</ul> <!-- End -->
+</div>
+</div>
+{% endblock %}
