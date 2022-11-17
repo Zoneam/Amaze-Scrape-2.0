@@ -22,6 +22,7 @@ class Store(models.Model):
 class Product(models.Model):    
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store')
     title = models.CharField(max_length=250, blank=True)
+    # add was price model
     was = models.EmailField(max_length=254, null=True, blank=True)
     current = models.URLField(max_length = 250, null=True, blank=True)
     imgLink = models.URLField(max_length = 250, null=True, blank=True)
@@ -31,3 +32,11 @@ class Product(models.Model):
     
     def __str__(self):
         return self.store.name
+
+class Price(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product')
+    price = models.FloatField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.product.title

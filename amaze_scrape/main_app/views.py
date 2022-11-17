@@ -166,7 +166,6 @@ def safeway_query(request):
         print(store.age())
         if store.age() < 1:
             productResults = Product.objects.filter(store = store.id)
-            print (productResults[0].discount)
             return render(request, 'safeway.html', {'productResults': productResults})
     else:
         Store.objects.create(user=request.user, name='Safeway')
