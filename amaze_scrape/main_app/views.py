@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
+from .models import Product, Store
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -19,6 +20,7 @@ from django.db.models import Sum
 from selenium.webdriver.common.action_chains import ActionChains
 import threading
 import re
+from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
@@ -56,10 +58,11 @@ def search(request):
     return render(request, 'search.html')
 
 def interceptor(request):
+
     del request.headers['Referer']  # Delete the header first
     request.headers['Referer'] = HEADERS
 
-
+@login_required
 def amazon_query(request):
     queryset = request.GET.get("search")
     if not queryset:
@@ -77,7 +80,6 @@ def amazon_query(request):
     # action = ActionChains(driver)
     # holdBtn = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "px-captcha")))
     # action.click_and_hold(on_element = holdBtn)
-  
     # # perform the operation
     # action.perform()
     # time.sleep(15)
@@ -114,6 +116,7 @@ def amazon_query(request):
     driver.close()
     return render(request, 'amazon.html', {'productResults': productResults})
 
+@login_required
 def raleys_query(request):
     productResults = []
     options = Options()
@@ -155,8 +158,27 @@ def raleys_query(request):
     productResults = sorted(productResults, key=lambda k: k['discount'], reverse=True)
     return render(request, 'raleys.html', {'productResults': productResults})
 
-
+@login_required
 def safeway_query(request):
+    if (Store.objects.filter(user=request.user).exists()):
+        store = Store.objects.get(user=request.user)
+        print('>>>>>>>>> exists')
+        print(store.age())
+        if store.age() < 1:
+            productResults = Product.objects.filter(store = store.id)
+            print (productResults[0].discount)
+            return render(request, 'safeway.html', {'productResults': productResults})
+    else:
+        Store.objects.create(user=request.user, name='Safeway')
+        store = Store.objects.get(user=request.user)
+        print('>>>>>>>>> doesnt exist')
+
+    # if store.created_at < timezone.now() - timedelta(days=1):
+    #     store.delete()
+    #     Store.objects.create(user=request.user, name='Safeway')
+    #     store = Store.objects.get(user=request.user)
+    #     print('deleted')
+
     productResults = []
     options = Options()
     options.add_argument("--incognito")
@@ -167,9 +189,7 @@ def safeway_query(request):
     driver.get(f'https://www.safeway.com/shop/deals/member-specials.html')
     # WebDriverWait(driver,65).until(EC.visibility_of_element_located((By.ID, "apps-flyer-wrapper")))
     soup = BeautifulSoup(driver.page_source, 'html.parser')
-
     raw_results = soup.find_all( class_ = "product-item-inner")
-    # print(raw_results)
     if raw_results:
         for idx,result in enumerate(raw_results):
             print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
@@ -177,8 +197,8 @@ def safeway_query(request):
             was = '.'.join(re.findall(r'\d+', result.find('span', class_ = 'product-strike-base-price').text)) if result.find('span', class_ = 'product-strike-base-price') is not None else ''
             current = '.'.join(re.findall(r'\d+', result.find('span', class_ = 'product-price product-strike-price').text))  if result.find('span', class_ = 'product-price product-strike-price') is not None else ''
             aTag = result.find('a') if result.find('a') is not None else ''
-            # link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
             productResult = {
+                'store': store,
                 'was': was,
                 'current': current,
                 'title': title,
@@ -186,14 +206,16 @@ def safeway_query(request):
                 'discount': round((1 - (float(current) / float(was))) * 100, 2),
                 'link': f'https://www.safeway.com{aTag["href"]}',
             }
-            print('-----------------------------------')
             productResults.append(productResult)
     else:
         print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
     driver.close()
     productResults = sorted(productResults, key=lambda k: k['discount'], reverse=True)
-    return render(request, 'safeway.html', {'productResults': productResults})
 
+    for product in productResults:
+        Product.objects.create(title = product['title'], discount = product['discount'], store = product['store'], was = product['was'], current = product['current'], imgLink = product['imgLink'], link = product['link'])
+    
+    return render(request, 'safeway.html', {'productResults': productResults})
 
 
 def walmart_query(request):

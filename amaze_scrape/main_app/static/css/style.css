@@ -453,3 +453,11 @@ main {
   justify-content: space-between;
   align-items: center;
 }
+
+.media-body {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5%;
+  width: -webkit-fill-available;
+  justify-content: space-between;
+}
