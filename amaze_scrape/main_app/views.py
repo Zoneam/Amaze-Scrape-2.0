@@ -20,6 +20,7 @@ from django.db.models import Sum
 from selenium.webdriver.common.action_chains import ActionChains
 import threading
 import re
+import schedule
 from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -162,21 +163,21 @@ def raleys_query(request):
 def safeway_query(request):
     if (Store.objects.filter(user=request.user).exists()):
         store = Store.objects.get(user=request.user)
-        print('>>>>>>>>> exists')
+        print('>>>>>>>>> store exists')
         print(store.age())
         if store.age() < 1:
             productResults = Product.objects.filter(store = store.id)
             return render(request, 'safeway.html', {'productResults': productResults})
+        else:
+            print('>>>>>>>>> store expired')
+            store.delete()
+            Store.objects.create(user=request.user, name='Safeway')
+            store = Store.objects.get(user=request.user)
+            print('>>>>>>>> new store created')
     else:
         Store.objects.create(user=request.user, name='Safeway')
         store = Store.objects.get(user=request.user)
-        print('>>>>>>>>> doesnt exist')
-
-    # if store.created_at < timezone.now() - timedelta(days=1):
-    #     store.delete()
-    #     Store.objects.create(user=request.user, name='Safeway')
-    #     store = Store.objects.get(user=request.user)
-    #     print('deleted')
+        print(">>>>>>>>> store doesn't exist")
 
     productResults = []
     options = Options()

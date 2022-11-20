@@ -33,10 +33,10 @@ class Product(models.Model):
     def __str__(self):
         return self.store.name
 
-class Price(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product')
-    price = models.FloatField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+# class Price(models.Model):
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product')
+#     price = models.FloatField(null=True, blank=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.product.title
+#     def __str__(self):
+#         return self.product.title
