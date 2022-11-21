@@ -180,6 +180,7 @@ def safeway_query(request):
     options = Options()
     options.add_argument("--incognito")
     options.headless = True
+    options.path = '/chromedriver'
     driver = webdriver.Chrome(options=options)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
