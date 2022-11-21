@@ -24,7 +24,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 
-CHROMEPATH ='chromedriver'
+CHROMEPATH ='./chromedriver'
 
 HEADERS = ({ 
       'user-agent': 'Mozilla/5.0 (Windows NT 16.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.132 Safari/537.36',
