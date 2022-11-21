@@ -4,6 +4,7 @@ import uuid
 import time
 import schedule
 import threading
+# import chromedriver from './chromedriver';
 import pandas as pd
 from django.shortcuts import render, redirect
 from bs4 import BeautifulSoup
@@ -22,6 +23,8 @@ from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
+
+CHROMEPATH ='chromedriver'
 
 HEADERS = ({ 
       'user-agent': 'Mozilla/5.0 (Windows NT 16.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.132 Safari/537.36',
@@ -180,8 +183,8 @@ def safeway_query(request):
     options = Options()
     options.add_argument("--incognito")
     options.headless = True
-    options.path = '/chromedriver'
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(executable_path = CHROMEPATH, options=options)
+    print(driver)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
     driver.get(f'https://www.safeway.com/shop/deals/member-specials.html')
