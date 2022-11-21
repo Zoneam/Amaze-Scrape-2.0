@@ -73,11 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'amaze_scrape.wsgi.application'
 
-ALLOWED_HOSTS = [
-  'localhost',
-  '127.0.0.1',
-  '111.222.333.444',
-  'mywebsite.example']
+ALLOWED_HOSTS = ['*']
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
