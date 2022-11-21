@@ -16,7 +16,6 @@ from django.contrib.auth.forms import UserCreationForm
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
 from django.db.models import Sum
 from selenium.webdriver.common.action_chains import ActionChains
 from datetime import datetime, timedelta
@@ -181,7 +180,6 @@ def safeway_query(request):
     options = Options()
     options.add_argument("--incognito")
     options.headless = True
-    options.path = '/chromedriver'
     driver = webdriver.Chrome(options=options)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
