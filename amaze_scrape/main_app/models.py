@@ -22,7 +22,6 @@ class Store(models.Model):
 class Product(models.Model):    
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store')
     title = models.CharField(max_length=250, blank=True)
-    # add was price model
     was = models.EmailField(max_length=254, null=True, blank=True)
     current = models.URLField(max_length = 250, null=True, blank=True)
     imgLink = models.URLField(max_length = 250, null=True, blank=True)

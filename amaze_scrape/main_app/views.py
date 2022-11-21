@@ -1,16 +1,16 @@
+import re
 import os
 import uuid
-# from datetime import date
-from django.shortcuts import render, redirect
-# import requests
-from bs4 import BeautifulSoup
-import re
+import time
+import schedule
+import threading
 import pandas as pd
+from django.shortcuts import render, redirect
+from bs4 import BeautifulSoup
 from .models import Product, Store
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
-import time
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from selenium.webdriver.support.ui import WebDriverWait
@@ -18,9 +18,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from django.db.models import Sum
 from selenium.webdriver.common.action_chains import ActionChains
-import threading
-import re
-import schedule
 from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
