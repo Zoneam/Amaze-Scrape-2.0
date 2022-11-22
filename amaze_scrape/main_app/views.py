@@ -184,6 +184,7 @@ def safeway_query(request):
     options.add_argument("--incognito")
     options.headless = True
     options.no_sandbox = True
+    options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(executable_path = os.environ.get('CHROMEDRIVER_PATH'),options=options)
     print(driver)
     # Set the interceptor on the driver
