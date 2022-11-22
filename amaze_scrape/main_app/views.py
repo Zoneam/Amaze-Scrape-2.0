@@ -191,7 +191,7 @@ def safeway_query(request):
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
     driver.get(f'https://www.safeway.com/shop/deals/member-specials.html')
-    WebDriverWait(driver,65).until(EC.visibility_of_element_located((By.ClassName, "aproduct-grid-v2")))
+    WebDriverWait(driver,65).until(EC.visibility_of_element_located((By.CLASS_NAME , "aproduct-grid-v2")))
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     print(soup)
     raw_results = soup.find_all( class_ = "product-item-inner")
