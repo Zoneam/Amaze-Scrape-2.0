@@ -24,7 +24,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 
-CHROMEPATH ='./chromedriver'
 
 HEADERS = ({ 
       'user-agent': 'Mozilla/5.0 (Windows NT 16.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.132 Safari/537.36',
@@ -183,7 +182,7 @@ def safeway_query(request):
     options = Options()
     options.add_argument("--incognito")
     options.headless = True
-    driver = webdriver.Chrome(executable_path = CHROMEPATH, options=options)
+    driver = webdriver.Chrome(options=options)
     print(driver)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
