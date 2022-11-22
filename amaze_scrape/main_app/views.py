@@ -180,9 +180,11 @@ def safeway_query(request):
 
     productResults = []
     options = Options()
+    options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     options.add_argument("--incognito")
     options.headless = True
-    driver = webdriver.Chrome(options=options)
+    options.no_sandbox = True
+    driver = webdriver.Chrome(executable_path = os.environ.get('CHROMEDRIVER_PATH'),options=options)
     print(driver)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
