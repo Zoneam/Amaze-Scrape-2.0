@@ -23,7 +23,7 @@ from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-
+from webdriver_manager.chrome import ChromeDriverManager
 
 HEADERS = ({ 
       'user-agent': 'Mozilla/5.0 (Windows NT 16.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.132 Safari/537.36',
@@ -122,7 +122,7 @@ def raleys_query(request):
     options = Options()
     options.add_argument("--incognito")
     options.headless = True
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome( options=options)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
     driver.get(f'https://shop.raleys.com/shop/categories/52?tags=on_sale')
@@ -165,7 +165,7 @@ def safeway_query(request):
         print('>>>>>>>>> store exists')
         print(store.age())
         if store.age() < 1:
-            productResults = Product.objects.filter(store = store.id)
+            productResults = Product.objects.filter(store = store.id).order_by('-discount')
             return render(request, 'safeway.html', {'productResults': productResults})
         else:
             print('>>>>>>>>> store expired')
@@ -177,30 +177,31 @@ def safeway_query(request):
         Store.objects.create(user=request.user, name='Safeway')
         store = Store.objects.get(user=request.user)
         print(">>>>>>>>> store doesn't exist")
-
+    
     productResults = []
     options = Options()
-    options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     options.add_argument("--incognito")
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument('--disable-gpu')
     options.add_argument("--crash-dumps-dir=/tmp")
     options.add_argument("--disable-dev-shm-usage")
-    driver = webdriver.Chrome(executable_path = os.environ.get('CHROMEDRIVER_PATH'),options=options)
+    driver = webdriver.Chrome(options=options)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
     driver.get(f'https://www.safeway.com/shop/deals/member-specials.html')
-    WebDriverWait(driver,28).until(EC.visibility_of_element_located((By.CLASS_NAME , "aproduct-grid-v2")))
+    print(driver)
+    WebDriverWait(driver,28).until(EC.visibility_of_element_located((By.CLASS_NAME , "product-level-4")))
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     print(soup)
-    raw_results = soup.find_all( class_ = "product-item-inner")
+    raw_results = soup.find_all( class_ = "product-card-container")
     if raw_results:
         for idx,result in enumerate(raw_results):
             print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
-            title = result.find('a', class_ = "product-title").text if result.find('a', class_ = "product-title") is not None else ''
-            was = '.'.join(re.findall(r'\d+', result.find('span', class_ = 'product-strike-base-price').text)) if result.find('span', class_ = 'product-strike-base-price') is not None else ''
-            current = '.'.join(re.findall(r'\d+', result.find('span', class_ = 'product-price product-strike-price').text))  if result.find('span', class_ = 'product-price product-strike-price') is not None else ''
+            title = result.find('a', class_ = "product-title__name").text if result.find('a', class_ = "product-title__name") is not None else ''
+            was = '.'.join(re.findall(r'\d+', result.find('del', class_ = 'product-price__baseprice').text)) if result.find('del', class_ = 'product-price__baseprice') is not None else ''
+            current = '.'.join(re.findall(r'\d+', result.find('span', class_ = 'product-price__discounted-price').text))  if result.find('span', class_ = 'product-price__discounted-price') is not None else ''
             aTag = result.find('a') if result.find('a') is not None else ''
             productResult = {
                 'store': store,
