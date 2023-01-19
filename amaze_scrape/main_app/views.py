@@ -58,7 +58,6 @@ def search(request):
     return render(request, 'search.html')
 
 def interceptor(request):
-
     del request.headers['Referer']  # Delete the header first
     request.headers['Referer'] = HEADERS
 
@@ -118,22 +117,47 @@ def amazon_query(request):
 
 @login_required
 def raleys_query(request):
+    if (Store.objects.filter(user=request.user).exists()):
+        store = Store.objects.get(user=request.user) #need store name to find correct store
+        print('>>>>>>>>> store exists')
+        print(store.age())
+        if store.age() < 1:
+            productResults = Product.objects.filter(store = store.id).order_by('-discount')
+            return render(request, 'safeway.html', {'productResults': productResults})
+        else:
+            print('>>>>>>>>> store expired')
+            store.delete()
+            Store.objects.create(user=request.user, name='Safeway')
+            store = Store.objects.get(user=request.user)
+            print('>>>>>>>> new store created')
+    else:
+        Store.objects.create(user=request.user, name='Safeway')
+        store = Store.objects.get(user=request.user)
+        print(">>>>>>>>> store doesn't exist")
     productResults = []
     options = Options()
     options.add_argument("--incognito")
-    options.headless = True
-    driver = webdriver.Chrome( options=options)
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument('--disable-gpu')
+    options.add_argument("--crash-dumps-dir=/tmp")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(options=options)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
     driver.get(f'https://shop.raleys.com/shop/categories/52?tags=on_sale')
-    WebDriverWait(driver,65).until(EC.visibility_of_element_located((By.ID, "content")))
+    WebDriverWait(driver,65).until(EC.presence_of_element_located((By.CLASS_NAME, "add-to-cart-button")))
+    html = driver.page_source
+    print('html',html)
+    driver.implicitly_wait(65)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
-    # print(soup)
     if soup.find('title').text == 'Sorry! Something went wrong!':
         print('\033[48;5;225m\033[38;5;24 driver Sorry! Something went wrong! \033[0;0m')
     else:
-        raw_results = soup.find_all( class_ = "cell-wrapper")
-        # print(raw_results)
+        raw_results = soup.find_all("li", class_="cell-wrapper")
+        # raw_results = soup.select(".react-cell.cell.product-cell")
+        # raw_results = soup.select("li[ng-repeat='item in items track by $index']")
+        print(raw_results)
         if raw_results:
             for idx,result in enumerate(raw_results):
                 print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
@@ -149,7 +173,7 @@ def raleys_query(request):
                     'title': title,
                     'imgLink': imgLink,
                     'discount': round((1 - (float(current[1:]) / float(was[1:]))) * 100, 2),
-                    # 'link': link,
+                    'link': 'https://shop.raleys.com/shop/categories/52?tags=on_sale',
                 }
                 productResults.append(productResult)
         else:
@@ -195,7 +219,7 @@ def safeway_query(request):
     WebDriverWait(driver,28).until(EC.visibility_of_element_located((By.CLASS_NAME , "product-level-4")))
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     print(soup)
-    raw_results = soup.find_all( class_ = "product-card-container")
+    raw_results = soup.find_all(class_ = "product-card-container")
     if raw_results:
         for idx,result in enumerate(raw_results):
             print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
@@ -222,7 +246,6 @@ def safeway_query(request):
         Product.objects.create(title = product['title'], discount = product['discount'], store = product['store'], was = product['was'], current = product['current'], imgLink = product['imgLink'], link = product['link'])
     
     return render(request, 'safeway.html', {'productResults': productResults})
-
 
 def walmart_query(request):
     return HttpResponse('<h1>Under Construction</h1>')

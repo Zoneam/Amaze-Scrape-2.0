@@ -4,6 +4,7 @@
         <!-- List group-->
         <ul class="list-group shadow">
   {% for product in productResults %}
+      <a href='{{ product.link }}' target='_blank}'>
             <!-- list group item-->
             <li class="list-group-item my-2">
                 <!-- Custom content-->
@@ -20,6 +21,7 @@
                     </div>
                 </div> <!-- End -->
             </li> <!-- End -->
+            </a>
   {% endfor %}
 </ul> <!-- End -->
 </div>
