@@ -13,6 +13,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from django.contrib.auth import login
+from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -117,22 +118,23 @@ def amazon_query(request):
 
 @login_required
 def raleys_query(request):
-    if (Store.objects.filter(user=request.user).exists()):
-        store = Store.objects.get(user=request.user) #need store name to find correct store
+    if Store.objects.filter(Q(user=request.user) & Q(name='Raleys')).exists():
+        store = Store.objects.get(Q(user=request.user) & Q(name='Raleys')) #need store name to find correct store
         print('>>>>>>>>> store exists')
+        print(store.id)
         print(store.age())
         if store.age() < 1:
             productResults = Product.objects.filter(store = store.id).order_by('-discount')
-            return render(request, 'safeway.html', {'productResults': productResults})
+            return render(request, 'raleys.html', {'productResults': productResults})
         else:
             print('>>>>>>>>> store expired')
             store.delete()
-            Store.objects.create(user=request.user, name='Safeway')
-            store = Store.objects.get(user=request.user)
+            Store.objects.create(user=request.user, name='Raleys')
+            store = Store.objects.get(Q(user=request.user) & Q(name='Raleys'))
             print('>>>>>>>> new store created')
     else:
-        Store.objects.create(user=request.user, name='Safeway')
-        store = Store.objects.get(user=request.user)
+        Store.objects.create(user=request.user, name='Raleys')
+        store = Store.objects.get(Q(user=request.user) & Q(name='Raleys'))
         print(">>>>>>>>> store doesn't exist")
     productResults = []
     options = Options()
@@ -168,6 +170,7 @@ def raleys_query(request):
                 print('------>>>>>')
                 # link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
                 productResult = {
+                    'store': store,
                     'was': f"{was}",
                     'current': current,
                     'title': title,
@@ -180,13 +183,16 @@ def raleys_query(request):
             print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
     driver.close()
     productResults = sorted(productResults, key=lambda k: k['discount'], reverse=True)
+    for product in productResults:
+        Product.objects.create(title = product['title'], discount = product['discount'], store = product['store'], was = product['was'], current = product['current'], imgLink = product['imgLink'], link = product['link'])
     return render(request, 'raleys.html', {'productResults': productResults})
 
 @login_required
 def safeway_query(request):
-    if (Store.objects.filter(user=request.user).exists()):
-        store = Store.objects.get(user=request.user)
+    if Store.objects.filter(Q(user=request.user) & Q(name='Safeway')).exists():
+        store = Store.objects.get(Q(user=request.user) & Q(name='Safeway'))
         print('>>>>>>>>> store exists')
+        print(store)
         print(store.age())
         if store.age() < 1:
             productResults = Product.objects.filter(store = store.id).order_by('-discount')
@@ -195,11 +201,11 @@ def safeway_query(request):
             print('>>>>>>>>> store expired')
             store.delete()
             Store.objects.create(user=request.user, name='Safeway')
-            store = Store.objects.get(user=request.user)
+            store = Store.objects.get(Q(user=request.user) & Q(name='Safeway'))
             print('>>>>>>>> new store created')
     else:
         Store.objects.create(user=request.user, name='Safeway')
-        store = Store.objects.get(user=request.user)
+        store = Store.objects.get(Q(user=request.user) & Q(name='Safeway'))
         print(">>>>>>>>> store doesn't exist")
     
     productResults = []
