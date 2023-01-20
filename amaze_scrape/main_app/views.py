@@ -118,8 +118,8 @@ def amazon_query(request):
 
 @login_required
 def raleys_query(request):
-    if Store.objects.filter(Q(user=request.user) & Q(name='Raleys')).exists():
-        store = Store.objects.get(Q(user=request.user) & Q(name='Raleys')) #need store name to find correct store
+    if Store.objects.filter(name='Raleys').exists():
+        store = Store.objects.get(name='Raleys') # get the store
         print('>>>>>>>>> store exists')
         print(store.id)
         print(store.age())
@@ -129,12 +129,12 @@ def raleys_query(request):
         else:
             print('>>>>>>>>> store expired')
             store.delete()
-            Store.objects.create(user=request.user, name='Raleys')
-            store = Store.objects.get(Q(user=request.user) & Q(name='Raleys'))
+            Store.objects.create(name='Raleys')
+            store = Store.objects.get(name='Raleys')
             print('>>>>>>>> new store created')
     else:
-        Store.objects.create(user=request.user, name='Raleys')
-        store = Store.objects.get(Q(user=request.user) & Q(name='Raleys'))
+        Store.objects.create(name='Raleys')
+        store = Store.objects.get(name='Raleys')
         print(">>>>>>>>> store doesn't exist")
     productResults = []
     options = Options()

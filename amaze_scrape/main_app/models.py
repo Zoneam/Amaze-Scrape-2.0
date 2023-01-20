@@ -8,7 +8,6 @@ from django.contrib.postgres.fields import ArrayField
 from datetime import datetime
 
 class Store(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=40, blank=True)
     # link = models.URLField(max_length = 250, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
