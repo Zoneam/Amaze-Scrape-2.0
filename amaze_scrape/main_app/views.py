@@ -144,7 +144,7 @@ def amazon_query(request):
                             score += 1
                 return score
 
-    for idx, amazonProductResult in enumerate(amazonProductResults[:1]):
+    for idx, amazonProductResult in enumerate(amazonProductResults[:15]):
         print(idx, amazonProductResult['amazontitle'])
         target_url=f"https://www.walmart.com/search?q={amazonProductResult['amazontitle']}"
         resp = requests.get(target_url, headers=HEADERSWM)
@@ -172,11 +172,12 @@ def amazon_query(request):
         
         sorted_WalMart_list = sorted(wmProductResults, key=lambda x: x['grade'], reverse=True)
         if int(sorted_WalMart_list[0]['grade'] * 100 / len(amazonProductResult['amazontitle'].split())) > 70:
-            sorted_WalMart_list[0]['grade'] = f"{int(sorted_WalMart_list[0]['grade'] * 100 / len(amazonProductResult['amazontitle'].split()))}%"
+            sorted_WalMart_list[0]['grade'] = int(sorted_WalMart_list[0]['grade'] * 100 / len(amazonProductResult['amazontitle'].split()))
             compareResults.append({**amazonProductResult, **sorted_WalMart_list[0]})
     # -------------------- Walmart Block end --------------------
-    print('>>>>>>>>> compareResults', compareResults)
-    return render(request, 'amazon.html', {'compareResults': compareResults})
+    sortedCompareResults = sorted(compareResults, key=lambda x: x['grade'], reverse=True)
+    print('>>>>>>>>> compareResults', sortedCompareResults)
+    return render(request, 'amazon.html', {'compareResults': sortedCompareResults})
 
 @login_required
 def raleys_query(request):

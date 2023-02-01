@@ -126,6 +126,10 @@ main {
   padding: 20px;
 }
 
+.ml3{ 
+  margin-left: 5px;;
+}
+
 .title-h3 {
   font-size: 0.75rem;
 }

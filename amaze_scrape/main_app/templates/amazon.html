@@ -41,50 +41,54 @@
   </div> {% endcomment %}
 
   <div class="card-wrapper">
-    <div class="inner-wrap">
-      <div class="flex ">
-        <div class="relative">
-          <div class="aspect-ratio aspect-ratio--1x1">
-            <img style="object-fit: contain; min-width: 160px" src="{{ product.amazonimgLink }}" width="160" height="160"/>
+    <a target="_blank" href="https://amazon.com/{{ product.amazonlink }}">
+      <div class="inner-wrap">
+        <div class="flex ">
+          <div class="relative">
+            <div class="aspect-ratio aspect-ratio--1x1">
+              <img style="object-fit: contain; min-width: 160px" src="{{ product.amazonimgLink }}" width="160" height="160"/>
+            </div>
+          </div>
+        </div>
+        <div class="ml3 relative">
+          <div class="w-100">
+            <div class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m">
+              <span class="w_iUH7">Amazon Price {{ product.amazonPrice }}</span>
+            </div>
+            <span><h3 class="title-h3">
+              {{ product.amazontitle }}
+              </h3></span>
           </div>
         </div>
       </div>
-      <div class="ml3 relative">
-        <div class="w-100">
-          <div class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m">
-            <span class="w_iUH7">Amazon Price {{ product.amazonPrice }}</span>
-          </div>
-          <span><h3 class="title-h3">
-            {{ product.amazontitle }}
-            </h3></span>
-        </div>
-      </div>
-    </div>
+    </a>
 
 
-    
     <div class="middle-info">
-      <span class="grade">Title Match {{ product.grade }}</span>
+      <span class="grade">Title Match {{ product.grade }}%</span>
     </div>
-    <div class="inner-wrap">
-      <div class="flex ">
-        <div class="relative">
-          <div class="aspect-ratio aspect-ratio--1x1">
-            <img style="object-fit: contain; min-width: 160px" src="{{ product.walMartimgLink }}" width="160" height="160"/>
+
+    <a target="_blank" href="https://walmart.com{{ product.walMartlink }}">
+      <div class="inner-wrap">
+        <div class="flex ">
+          <div class="relative">
+            <div class="aspect-ratio aspect-ratio--1x1">
+              <img style="object-fit: contain; min-width: 160px" src="{{ product.walMartimgLink }}" width="160" height="160"/>
+            </div>
+          </div>
+        </div>
+        <div class="ml3 relative">
+          <div class="w-100">
+            <div class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m">
+              <span class="w_iUH7">WalMart Price {{ product.walMartprice }}</span>
+            </div>
+            <span><h3 class="title-h3">
+              {{ product.walMarttitle }}
+              </h3></span>
           </div>
         </div>
       </div>
-      <div class="ml3 relative">
-        <div class="w-100">
-          <div class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m">
-            <span class="w_iUH7">WalMart Price {{ product.walMartprice }}</span>
-          </div>
-          <span><h3 class="title-h3">
-            {{ product.walMarttitle }}
-            </h3></span>
-        </div>
-      </div>
-    </div>
+    </a>
   </div>
 
   {% endfor %}
