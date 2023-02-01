@@ -144,7 +144,7 @@ def amazon_query(request):
                             score += 1
                 return score
 
-    for idx, amazonProductResult in enumerate(amazonProductResults[:3]):
+    for idx, amazonProductResult in enumerate(amazonProductResults[:1]):
         print(idx, amazonProductResult['amazontitle'])
         target_url=f"https://www.walmart.com/search?q={amazonProductResult['amazontitle']}"
         resp = requests.get(target_url, headers=HEADERSWM)

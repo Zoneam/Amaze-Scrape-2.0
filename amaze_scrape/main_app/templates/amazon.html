@@ -1,37 +1,91 @@
 {% extends 'search.html' %} {% block amazon %}
 <div id="search-results">
   {% for product in compareResults %}
-  <div class="card">
+  {% comment %} <div class="card">
     <div class="card-content" title="{{product.amazontitle}}">
       <span>{{ product.grade }} Title Match</span>
-        <div class="inner-card">
-          <div id='product-images' class= 'wmaz'>
-            <img
-              class="product-image amazon"
-              src="{{ product.amazonimgLink }}"
-              alt="{{ product.amazontitle }}"
-            />
-            <img
+      <div class="inner-card">
+        <div id="product-images" class="wmaz">
+          <img
+            class="product-image amazon"
+            src="{{ product.amazonimgLink }}"
+            alt="{{ product.amazontitle }}"
+          />
+          <p class="card-title">
+            {% if product.walMarttitle|length < 40 %} {{ product.walMarttitle }}
+            {% else %} {{ product.walMarttitle|slice:":40" }}... {% endif %}
+          </p>
+          <img
             class="product-image walmart"
             src="{{ product.walMartimgLink }}"
             alt="{{ product.walMarttitle }}"
-            />
-          </div>
-          <div id="title-wrapper">
-            <p class="card-title">
-              {% if product.amazontitle|length < 40 %} {{ product.amazontitle }} {% else %}
-              {{ product.amazontitle|slice:":40" }}... {% endif %}
-            </p>
-            <a target="_blank" href="https://amazon.com/{{ product.amazonlink }}">
-              <span class="price">Amazon price: {{ product.amazonPrice }}</span>
-            </a>
-            <a target="_blank" href="https://walmart.com{{ product.walMartlink }}">
-              <span class="price">WalMart price: {{ product.walMartprice }}</span>
-            </a>
+          />
+        </div>
+        <div id="title-wrapper">
+          <p class="card-title">
+            {% if product.amazontitle|length < 40 %} {{ product.amazontitle }}
+            {% else %} {{ product.amazontitle|slice:":40" }}... {% endif %}
+          </p>
+          <a target="_blank" href="https://amazon.com/{{ product.amazonlink }}">
+            <span class="price">Amazon price: {{ product.amazonPrice }}</span>
+          </a>
+          <a
+            target="_blank"
+            href="https://walmart.com{{ product.walMartlink }}"
+          >
+            <span class="price">WalMart price: {{ product.walMartprice }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div> {% endcomment %}
+
+  <div class="card-wrapper">
+    <div class="inner-wrap">
+      <div class="flex ">
+        <div class="relative">
+          <div class="aspect-ratio aspect-ratio--1x1">
+            <img style="object-fit: contain; min-width: 160px" src="{{ product.amazonimgLink }}" width="160" height="160"/>
           </div>
         </div>
+      </div>
+      <div class="ml3 relative">
+        <div class="w-100">
+          <div class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m">
+            <span class="w_iUH7">Amazon Price {{ product.amazonPrice }}</span>
+          </div>
+          <span><h3 class="title-h3">
+            {{ product.amazontitle }}
+            </h3></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="middle-info">
+      <span class="grade">Title Match {{ product.grade }}</span>
+    </div>
+    <div class="inner-wrap">
+      <div class="flex ">
+        <div class="relative">
+          <div class="aspect-ratio aspect-ratio--1x1">
+            <img style="object-fit: contain; min-width: 160px" src="{{ product.walMartimgLink }}" width="160" height="160"/>
+          </div>
+        </div>
+      </div>
+      <div class="ml3 relative">
+        <div class="w-100">
+          <div class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m">
+            <span class="w_iUH7">WalMart Price {{ product.walMartprice }}</span>
+          </div>
+          <span><h3 class="title-h3">
+            {{ product.walMarttitle }}
+            </h3></span>
+        </div>
+      </div>
     </div>
   </div>
+
   {% endfor %}
 </div>
 {% endblock %}
+

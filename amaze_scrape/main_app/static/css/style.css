@@ -125,52 +125,39 @@ main {
 .card-body {
   padding: 20px;
 }
+
+.title-h3 {
+  font-size: 0.75rem;
+}
+
+.middle-info{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.inner-wrap{
+  display:flex;
+  padding: 4px;
+  border: 4px inset #1C6EA4;
+  width: 100%;
+}
+
+.card-wrapper{
+  display:flex;
+  width: 100%;
+  padding: 15px;
+}
+
 .booking-button,
 .update-booking {
   background-color: rgba(255, 180, 95, 0.512);
   box-shadow: 4px 5px 9px #1d1d1d;
   width: 100% !important;
 }
-.delete-booking {
-  box-shadow: 4px 5px 9px #1d1d1d;
-  width: 100% !important;
-  background-color: rgba(221, 221, 221, 0.717);
-  border-color: #1d1d1d;
-  margin-top: 15px;
-}
-.ex-booking-button {
-  background-color: #1d1d1d36;
-  box-shadow: 4px 5px 9px #1d1d1d;
-  width: 100% !important;
-}
-.transaction-icon,
-.booking-icon {
-  color: rgba(228, 147, 56, 0.861);
-}
-.transaction-icon:hover,
-.booking-icon:hover {
-  color: #1d1d1d;
-}
-.add-equip-btn {
-  background-color: rgba(255, 180, 95, 0.512);
-  color: #1d1d1d;
-  box-shadow: 4px 5px 9px #1d1d1d;
-  border-radius: 5px;
-}
-.add-equip-btn:hover {
-  background-color: rgba(228, 147, 56, 0.861);
-  color: #1d1d1d;
-}
-.my-equip-btn {
-  background-color: rgba(228, 147, 56, 0.861);
-  color: #1d1d1d;
-  box-shadow: 4px 5px 9px #1d1d1d;
-  border-radius: 5px;
-}
-.my-equip-btn:hover {
-  background-color: #555;
-  color: whitesmoke;
-}
+
 .col-md-3.mt-1.time {
   background-color: rgba(255, 180, 95, 0.512);
   justify-content: center;
@@ -183,17 +170,7 @@ main {
   box-shadow: 0px 4px 10px #1d1d1d;
   max-width: 20%;
 }
-.detail-card {
-  background-color: rgba(85, 85, 85, 0.528);
-  border-radius: 5px;
-  box-shadow: 4px 5px 9px #1d1d1d;
-}
-.expired-booking {
-  color: #e30000;
-  text-transform: uppercase;
-  text-shadow: -1px -1px 1px rgb(255 255 255 / 40%),
-    1px 1px 1px rgb(0 0 0 / 70%);
-}
+
 .btn-outline-dark {
   box-shadow: 4px 5px 9px #1d1d1d;
   background-color: rgba(221, 221, 221, 0.717);
@@ -202,9 +179,7 @@ main {
   justify-content: center;
   text-align: left;
 }
-.update-delete-trans {
-  width: 80%;
-}
+
 @media only screen and (min-width: 992px) {
   .navbar {
     padding: 0;
