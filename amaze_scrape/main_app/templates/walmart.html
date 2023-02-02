@@ -5,7 +5,7 @@
         <ul class="list-group shadow">
   {% for product in productResults %}
             <!-- list group item-->
-            <a href='{{ product.link }}' target='_blank}'>
+            <a href='https://walmart.com/{{ product.link }}' target='_blank}'>
             <li class="list-group-item my-2">
                 <!-- Custom content-->
                 <div class="media flex-column flex-lg-row wrapper" title="{{product.title}}">
@@ -15,7 +15,8 @@
                           {% if product.title|length < 50 %} {{ product.title }} {% else %}
                           {{ product.title|slice:":50" }}... {% endif %}</h5>
                         <div class="d-flex align-items-center justify-content-between mt-1">
-                          <h4 class="mr-1">Now: {{product.price}}</h4>
+                          <h4 class="mr-1">{{product.price}}</h4>
+                          <h4 class="mr-1">Was: {{product.was}}</h4>
                         </div>
                     </div>
                 </div> <!-- End -->

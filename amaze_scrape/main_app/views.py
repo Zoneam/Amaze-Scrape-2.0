@@ -124,8 +124,8 @@ def amazon_query(request):
     else:
         raw_results = soup.find_all( class_ = "s-asin")
         if raw_results:
-            for idx,result in enumerate(raw_results):
-                print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
+            for idx, result in enumerate(raw_results[:8]):
+                # print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m", result)
                 title = result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal").text if result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal") is not None else ''
                 if not title:
                     title = result.find('span', class_ = "a-size-medium a-color-base a-text-normal").text if result.find('span', class_ = "a-size-medium a-color-base a-text-normal") is not None else ''
@@ -134,7 +134,7 @@ def amazon_query(request):
                 imgLink = result.find('img', class_ = "s-image")['src'] if result.find('img', class_ = "s-image") is not None else ''
                 link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
                 productResult = {
-                    'amazonPrice': f"${whole}{fraction}",
+                    'amazonPrice': float(whole + fraction),
                     'amazontitle': title,
                     'amazonimgLink': imgLink,
                     'amazonlink': link,
@@ -146,11 +146,11 @@ def amazon_query(request):
 
 # -------------------- Walmart Block start --------------------------------
 
-    for idx, amazonProductResult in enumerate(amazonProductResults[:6]):
+    for idx, amazonProductResult in enumerate(amazonProductResults[:8]):
         print(idx, amazonProductResult['amazontitle'])
         target_url=f"https://www.walmart.com/search?q={amazonProductResult['amazontitle']}"
         resp = requests.get(target_url, headers=HEADERSWM)
-        time.sleep(2)
+        # time.sleep(2)
         soup = BeautifulSoup(resp.text, 'html.parser')
         products = soup.findAll("div", class_ = "pa0-xl")
 
@@ -162,7 +162,7 @@ def amazon_query(request):
             productResult = {
                 'walMartstore': 'Walmart',
                 'walMarttitle': title,
-                'walMartprice': price,
+                'walMartprice': float(re.search(r'\$(\d+\.\d+)', price).group(1)),
                 'walMartlink': link,
                 'walMartimgLink': imgLink,
                 'grade': 0,
@@ -174,7 +174,7 @@ def amazon_query(request):
         
         sorted_WalMart_list = sorted(wmProductResults, key=lambda x: x['grade'], reverse=True)
         
-        if sorted_WalMart_list[0]['grade'] > 15:
+        if sorted_WalMart_list[0]['grade'] > 30:
             print('>>>>>>>>> Match %',  sorted_WalMart_list[0]['grade'])
             compareResults.append({**amazonProductResult, **sorted_WalMart_list[0]})
     # -------------------- Walmart Block end --------------------
@@ -223,8 +223,6 @@ def raleys_query(request):
         print('\033[48;5;225m\033[38;5;24 driver Sorry! Something went wrong! \033[0;0m')
     else:
         raw_results = soup.find_all("li", class_="cell-wrapper")
-        # raw_results = soup.select(".react-cell.cell.product-cell")
-        # raw_results = soup.select("li[ng-repeat='item in items track by $index']")
         if raw_results:
             for idx,result in enumerate(raw_results):
                 print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m")
@@ -232,15 +230,22 @@ def raleys_query(request):
                 was = result.find('span', class_ = 'css-hhuz2w').text if result.find('span', class_ = 'css-hhuz2w') is not None else ''
                 current = result.find('span', class_ = 'css-os8wsm').text if result.find('span', class_ = 'css-os8wsm') is not None else ''
                 imgLink = result.find('span', class_ = "cell-image")['data-src'] if result.find('span', class_ = "cell-image") is not None else ''
-                print('------>>>>>')
-                # link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
+                if "for" in current:
+                    current = current.split("for")[-1].strip()[1:]
+                else:
+                    current = current[1:]
+                if "for" in was:
+                    was = was.split("for")[-1].strip()[1:]
+                else:
+                    was = was[1:]
+
                 productResult = {
                     'store': store,
                     'was': f"{was}",
                     'current': current,
                     'title': title,
                     'imgLink': imgLink,
-                    'discount': round((1 - (float(current[1:]) / float(was[1:]))) * 100, 2),
+                    'discount': round((1 - (float(current) / float(was))) * 100, 2),
                     'link': 'https://shop.raleys.com/shop/categories/52?tags=on_sale',
                 }
                 productResults.append(productResult)
@@ -341,7 +346,7 @@ def walmart_query(request):
     productResults = []
     # queryset = request.GET.get("search")
     #----------------------------------------------
-    target_url=f"https://www.walmart.com/search?q=Flying Orb Ball Toy - Hover Balls Toy for Kids | Floating Ball | Nebula Orb | Magic Flying Orbs Boomerang LED Ball Drone | Fly Orb Boomerang Spinning Ball Drones | Toys for Christmas"
+    target_url=f"https://www.walmart.com/shop/deals"
     resp = requests.get(target_url, headers=HEADERSWM)
     time.sleep(2)
     soup = BeautifulSoup(resp.text, 'html.parser')
@@ -350,13 +355,14 @@ def walmart_query(request):
     for idx, product in enumerate(products):
         title = product.find('span', attrs={"data-automation-id": "product-title"}).text if product.find('span', attrs={"data-automation-id": "product-title"}) is not None else ''
         price = product.find('div', attrs={"data-automation-id": "product-price"}).findChildren()[0].text if product.find('div', attrs={"data-automation-id": "product-price"}) is not None else ''
+        was = product.find('div', class_ = 'gray mr1 strike f7 f6-l').text if product.find('div', class_ = 'gray mr1 strike f7 f6-l') is not None else ''
         link = (product.find('a')["href"] if product.find('a')["href"] is not None else '')
         imgLink = (product.find('img')["src"] if product.find('img')["src"] is not None else '')
-        print(idx," -- ", title, price, link)
         productResult = {
             'store': 'Walmart',
             'title': title,
             'price': price,
+            'was': was,
             'link': link,
             'imgLink': imgLink,
         }
@@ -367,50 +373,10 @@ def walmart_query(request):
     else:
         print(False)
     return render(request, 'walmart.html', {'productResults': productResults})
-    # return render(request, 'safeway.html', {'productResults': []})
 
 
 def target_query(request):
-    # Copart
-    productResults = []
-    options = Options()
-    print('>>>>>>>>> options')
-    # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    options.add_argument("--incognito")
-    # options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument('--disable-gpu')
-    options.add_argument("--crash-dumps-dir=/tmp")
-    options.add_argument("--disable-dev-shm-usage")
-    driver = webdriver.Chrome(options=options)
-    # Set the interceptor on the driver
-    driver.request_interceptor = interceptor
-    driver.get(f'https://www.copart.com/login/')
-    WebDriverWait(driver,65).until(EC.visibility_of_element_located((By.ID , "username")))
-
-
-    username  = 'zoneam@gmail.com'
-    password = 'Rooter83'
-    uname = driver.find_element("id", "username") 
-    uname.send_keys(username)
-    passw = driver.find_element("id", "password") 
-    passw.send_keys(password)
-
-    driver.find_element(By.CSS_SELECTOR, "[data-uname='loginSigninmemberbutton']").click()
-    time.sleep(5)
-    driver.find_element(By.CSS_SELECTOR, "[ng-click='closeModal()']").click()
-    time.sleep(5)
-
-
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-    print(soup)
-    title = soup.find('div', class_ = "view-auction-list-title").text if soup.find('div', class_ = "view-auction-list-title") is not None else ''
-
-    driver.close()
-
-    print('>>>>>>>>> productResults',title)
-    return render(request, 'safeway.html', {'productResults': productResults})
-    # return HttpResponse('<h1>Under Construction</h1>')
+    return HttpResponse('<h1>Under Construction</h1>')
 
 def traderjoes_query(request):
     return HttpResponse('<h1>Under Construction</h1>')
