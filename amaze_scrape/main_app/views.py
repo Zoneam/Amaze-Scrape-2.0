@@ -4,6 +4,8 @@ import uuid
 import time
 import schedule
 import threading
+import string
+import math
 import pandas as pd
 from django.shortcuts import render, redirect
 from bs4 import BeautifulSoup
@@ -54,6 +56,21 @@ HEADERSWM = ({
     'sec-fetch-user': '?1',
     'upgrade-insecure-requests': '1',
     })
+
+
+def jaccard_similarity(s1, s2):
+    s1_words = set(s1.lower().split())
+    s2_words = set(s2.lower().split())
+
+    stop_words = {'the', 'and', 'a', 'an', 'of', 'in', 'to', 'that', 'is', 'for', 'it', 'with', 'as', 'was', 'on', 'at', 'by', 'be', 'this', 'which', 'or', 'but', 'not', 'are', 'from', 'they', 'we', 'an', 'said', 'was', 'were', 'he', 'she', 'has', 'have', 'had', 'will', 'its', 'can', 'could', 'would', '&'}
+    s1_words = s1_words - stop_words
+    s2_words = s2_words - stop_words
+    
+    return len(s1_words.intersection(s2_words)) / len(s1_words.union(s2_words))
+
+
+def matching_words_percentage(s1, s2):
+    return jaccard_similarity(s1, s2) * 100
 
 def signup(request):
 
@@ -128,23 +145,8 @@ def amazon_query(request):
     driver.close()
 
 # -------------------- Walmart Block start --------------------------------
-    def grade_title(title, keyword_title):
-                score = 0
-                title_words = title.split()
-                keyword_words = keyword_title.split()
-                for idx, keyword in enumerate(keyword_words):
-                    if keyword in title_words:
-                        if idx == 0:
-                            score += 3
-                        elif idx == 1:
-                            score += 2
-                        elif idx == 2:
-                            score += 1
-                        else:
-                            score += 1
-                return score
 
-    for idx, amazonProductResult in enumerate(amazonProductResults[:15]):
+    for idx, amazonProductResult in enumerate(amazonProductResults[:6]):
         print(idx, amazonProductResult['amazontitle'])
         target_url=f"https://www.walmart.com/search?q={amazonProductResult['amazontitle']}"
         resp = requests.get(target_url, headers=HEADERSWM)
@@ -168,15 +170,16 @@ def amazon_query(request):
             wmProductResults.append(productResult)
             
         for idx, wmProductResult in enumerate(wmProductResults):
-            wmProductResult['grade'] = grade_title(amazonProductResult['amazontitle'], wmProductResult['walMarttitle'])
+            wmProductResult['grade'] = math.floor(matching_words_percentage(amazonProductResult['amazontitle'], wmProductResult['walMarttitle']))
         
         sorted_WalMart_list = sorted(wmProductResults, key=lambda x: x['grade'], reverse=True)
-        if int(sorted_WalMart_list[0]['grade'] * 100 / len(amazonProductResult['amazontitle'].split())) > 70:
-            sorted_WalMart_list[0]['grade'] = int(sorted_WalMart_list[0]['grade'] * 100 / len(amazonProductResult['amazontitle'].split()))
+        
+        if sorted_WalMart_list[0]['grade'] > 15:
+            print('>>>>>>>>> Match %',  sorted_WalMart_list[0]['grade'])
             compareResults.append({**amazonProductResult, **sorted_WalMart_list[0]})
     # -------------------- Walmart Block end --------------------
     sortedCompareResults = sorted(compareResults, key=lambda x: x['grade'], reverse=True)
-    print('>>>>>>>>> compareResults', sortedCompareResults)
+
     return render(request, 'amazon.html', {'compareResults': sortedCompareResults})
 
 @login_required
