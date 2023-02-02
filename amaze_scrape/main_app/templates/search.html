@@ -1,15 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 
-<h1>Search For Products</h1>
-<div class="stores-wrapper">
-<a class="loading loading-top" href="{% url 'raleys_query' %}">Raley's</a>
-<a class="loading loading-top" href="{% url 'safeway_query' %}">Safeway</a>
-<a class="loading loading-top" href={% url 'walmart_query' %}>Walmart</a>
-<a class="loading loading-top" href="{% url 'target_query' %}">Target</a>
-<a class="loading loading-top" href="{% url 'traderjoes_query' %}">Trader Joe's</a>
-<a class="loading loading-top" href="{% url 'wholefoods_query' %}">Whole Foods</a>
-
-</div>
+<h1>Search And Compare Products (Amazon -> Wal-Mart)</h1>
 <form
   class="form-inline my-2 my-lg-0"
   method="GET"

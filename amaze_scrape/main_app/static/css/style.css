@@ -8,11 +8,7 @@ main {
   color: #1d1d1d;
 }
 
-#container-main {
-  display: flex;
-  flex-direction: column;
-  margin-top: 40px;
-}
+
 
 .initial-class {
   position: initial;
@@ -179,10 +175,7 @@ main {
   box-shadow: 4px 5px 9px #1d1d1d;
   background-color: rgba(221, 221, 221, 0.717);
 }
-#container-main > div > div > div > div > div.col-md-6.mt-1 {
-  justify-content: center;
-  text-align: left;
-}
+
 
 @media only screen and (min-width: 992px) {
   .navbar {
@@ -397,8 +390,15 @@ a {
   border-radius: 0.1275rem;
 }
 
-.container {
+#container-main {
+  display: flex;
+
   margin-top: 100px;
+}
+
+#login{
+  display: flex;
+
 }
 
 .was {

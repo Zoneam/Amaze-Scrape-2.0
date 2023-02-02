@@ -61,7 +61,6 @@ HEADERSWM = ({
 def jaccard_similarity(s1, s2):
     s1_words = set(s1.lower().split())
     s2_words = set(s2.lower().split())
-
     stop_words = {'the', 'and', 'a', 'an', 'of', 'in', 'to', 'that', 'is', 'for', 'it', 'with', 'as', 'was', 'on', 'at', 'by', 'be', 'this', 'which', 'or', 'but', 'not', 'are', 'from', 'they', 'we', 'an', 'said', 'was', 'were', 'he', 'she', 'has', 'have', 'had', 'will', 'its', 'can', 'could', 'would', '&'}
     s1_words = s1_words - stop_words
     s2_words = s2_words - stop_words
