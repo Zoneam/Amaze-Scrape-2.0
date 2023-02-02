@@ -161,7 +161,7 @@ def amazon_query(request):
             productResult = {
                 'walMartstore': 'Walmart',
                 'walMarttitle': title,
-                'walMartprice': float(re.search(r'\$(\d+\.\d+)', price).group(1)),
+                'walMartprice': float(re.search(r'\$(\d+\.\d+)', price).group(1)) if float(re.search(r'\$(\d+\.\d+)', price).group(1)) is not None else price,
                 'walMartlink': link,
                 'walMartimgLink': imgLink,
                 'grade': 0,

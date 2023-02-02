@@ -69,33 +69,34 @@
       <a class="navbar-brand" href="{% url 'search' %}">Amaze-Scrape 2.0</a>
 
    
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav mr-auto nav-links">
 
           {% if user.is_authenticated %}
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Todays Deals
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <a href="{% url 'raleys_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Dashboard">
-                  <img src="{% static 'images/raleys.png' %}" alt="walmart" width="24" height="24">
-                </a>
-              </li>
-              <li>
-                <a href="{% url 'safeway_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0 p-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Dashboard">
-                  <img src="{% static 'images/safeway.png' %}" alt="walmart" width="24" height="24">
-                </a>
-              </li>
-              <li>
-                <a href="{% url 'walmart_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Dashboard">
-                  <img src="{% static 'images/walmart.png' %}" alt="walmart" width="24" height="24">
-                </a>
-              </li>
-            </ul>
-          </li>
-
+          <div id="action-items">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Today's Deals
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="{% url 'raleys_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Raleys">
+                    <img class="store-logo" src="{% static 'images/raleys.png' %}" alt="walmart" width="70" height="70">
+                  </a>
+                </li>
+                <li>
+                  <a href="{% url 'safeway_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0 p-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Safeway">
+                    <img class="store-logo" src="{% static 'images/safeway.png' %}" alt="walmart" width="70" height="70">
+                  </a>
+                </li>
+                <li>
+                  <a href="{% url 'walmart_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Walmart">
+                    <img class="store-logo" src="{% static 'images/walmart.png' %}" alt="walmart" width="70" height="70">
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <a class="nav-link" href="{% url 'search' %}">Search and Compare</a>
+          </div>
 
           <div id="login">
             <li class="nav-item">

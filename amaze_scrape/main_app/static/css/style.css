@@ -8,8 +8,6 @@ main {
   color: #1d1d1d;
 }
 
-
-
 .initial-class {
   position: initial;
 }
@@ -23,6 +21,10 @@ main {
 
 .navbar-collapse.in {
   display: block !important;
+}
+
+#action-items{
+  display: flex;
 }
 
 .navbar-light .navbar-nav .nav-link {
@@ -193,24 +195,9 @@ main {
   padding: 0 20px 20px 30px;
 }
 
-.social-link {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #ddd;
-  display: flex;
-  align-items: center;
+.loading{
+  display:flex;
   justify-content: center;
-  color: #666;
-  border-radius: 50%;
-  transition: all 0.3s;
-  font-size: 0.9rem;
-}
-
-.social-link:hover,
-.social-link:focus {
-  background: #ddd;
-  text-decoration: none;
-  color: #555;
 }
 
 .progress {
@@ -222,39 +209,6 @@ main {
   float: right;
 }
 
-.save-btn-wrapper {
-  display: flex;
-  float: right;
-}
-
-.save-btn {
-  margin-top: 10px;
-  float: right;
-  background-color: rgb(255, 181, 95) !important;
-  box-shadow: 4px 5px 9px #1d1d1d;
-}
-
-.paginator-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.fileUpload {
-  position: relative;
-  overflow: hidden;
-  margin: 10px;
-}
-.fileUpload input.upload {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 0;
-  padding: 0;
-  font-size: 20px;
-  cursor: pointer;
-  opacity: 0;
-  filter: alpha(opacity=0);
-}
 
 .fa-circle-info {
   float: left !important;
@@ -291,6 +245,13 @@ main {
   padding: 0;
   -webkit-box-shadow: 0px 0px 8px 3px #ffbb0f;
   box-shadow: 0px 0px 4px 3px #302a2a81;
+}
+
+#status-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 
 .hidden {
@@ -368,6 +329,7 @@ a {
   color: #4559da;
   align-self: center;
   margin-top: 20px;
+  /* position: absolute; */
 }
 
 #title-wrapper {
@@ -380,6 +342,11 @@ a {
 
 .btn {
   margin-right: 0.5rem !important;
+}
+.nav-links{
+  display:flex;
+  justify-content: space-between;
+  width:100%;
 }
 
 .btn {
