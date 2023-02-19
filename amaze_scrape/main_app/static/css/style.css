@@ -1,11 +1,14 @@
 body {
   background-color: rgb(199, 199, 199);
+  padding-bottom: 25px;
 }
 
 main {
   /* font-family: "Gill Sans Extrabold", sans-serif; */
   font-size: 18px;
   color: #1d1d1d;
+
+  margin-bottom: 30px;
 }
 
 .initial-class {
@@ -39,6 +42,7 @@ main {
   font-size: 2.5em !important;
   color: rgb(116, 95, 255) !important;
   padding-left: 0 !important;
+  width: min-content;
   text-shadow: 2px 2px 2px #1d1d1d;
 }
 
@@ -259,7 +263,7 @@ main {
 }
 
 .visible {
-  display: block;
+  display: flex;
 }
 
 #search-results {
@@ -329,6 +333,7 @@ a {
   color: #4559da;
   align-self: center;
   margin-top: 20px;
+  justify-content: center;
   /* position: absolute; */
 }
 
@@ -423,4 +428,112 @@ a {
   margin-left: 5%;
   width: -webkit-fill-available;
   justify-content: space-between;
+}
+
+
+
+
+.progress {
+  width: 100px;
+  height: 100px;
+  background: none;
+  position: relative;
+}
+
+.progress::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 6px solid #eee;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.progress>span {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
+.progress .progress-left {
+  left: 0;
+}
+
+.progress .progress-bar {
+  width: 100%;
+  height: 100%;
+  background: none;
+  border-width: 6px;
+  border-style: solid;
+  position: absolute;
+  top: 0;
+}
+
+.progress .progress-left .progress-bar {
+  left: 100%;
+  border-top-right-radius: 80px;
+  border-bottom-right-radius: 80px;
+  border-left: 0;
+  -webkit-transform-origin: center left;
+  transform-origin: center left;
+}
+
+.progress .progress-right {
+  right: 0;
+}
+
+.progress .progress-right .progress-bar {
+  left: -100%;
+  border-top-left-radius: 80px;
+  border-bottom-left-radius: 80px;
+  border-right: 0;
+  -webkit-transform-origin: center right;
+  transform-origin: center right;
+}
+
+.progress .progress-value {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.progress-value{
+  flex-direction: column;
+}
+
+
+.link{
+  width:100%;
+}
+
+
+@media (max-width: 700px) {
+  .navbar-brand {
+    font-size: 14px;
+    margin:0;
+    padding: 0 !important;
+  }
+  #logo{
+    display:none !important;
+  }
+  .username{
+    display:none !important;
+  }
+  header {
+    height: 40px;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav li {
+    margin: 10px 0;
+  }
 }

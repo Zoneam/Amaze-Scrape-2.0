@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,6 +14,7 @@
       rel="stylesheet"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    
     <link
       href="https://fonts.googleapis.com/css2?family=Rajdhani&family=Roboto+Flex&display=swap"
       rel="stylesheet"
@@ -59,6 +61,7 @@
     >
       <lottie-player
         src="../../../static/images/falling-prices.json"
+        id="logo"
         background="transparent"
         speed="1"
         style="width: 105px"
@@ -103,7 +106,7 @@
               <a class="nav-link" href="{% url 'logout' %}" >Logout</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link">{{ user }}</a>
+              <a class="nav-link username">{{ user }}</a>
             </li>
           </div>
           {% else %}
@@ -119,7 +122,6 @@
     </nav>
     <main  id="container-main">
 
-      
     <div class="container">
       {% block content %} {% endblock %}
       {% block raleys %} {% endblock %}
@@ -128,5 +130,13 @@
 
     </div>
     </main>
+
   </body>
+    <footer class="bg-light text-center text-lg-start fixed-bottom">
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © {% now "Y" %} Copyright:
+        <a class="text-dark" >Hayk Mnatsakanyan</a>
+      </div>
+    </footer>
+
 </html>

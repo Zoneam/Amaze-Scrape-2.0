@@ -2,9 +2,6 @@ import re
 import os
 import uuid
 import time
-import schedule
-import threading
-import string
 import math
 import pandas as pd
 from django.shortcuts import render, redirect
@@ -67,6 +64,12 @@ def jaccard_similarity(s1, s2):
     
     return len(s1_words.intersection(s2_words)) / len(s1_words.union(s2_words))
 
+def isfloat(num):
+    try:
+        float(num)
+        return True
+    except ValueError:
+        return False
 
 def matching_words_percentage(s1, s2):
     return jaccard_similarity(s1, s2) * 100
@@ -133,7 +136,7 @@ def amazon_query(request):
                 imgLink = result.find('img', class_ = "s-image")['src'] if result.find('img', class_ = "s-image") is not None else ''
                 link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
                 productResult = {
-                    'amazonPrice': float(whole + fraction),
+                    'amazonPrice': float(whole + fraction) if isfloat(whole + fraction) else (whole + fraction),
                     'amazontitle': title,
                     'amazonimgLink': imgLink,
                     'amazonlink': link,
@@ -161,7 +164,7 @@ def amazon_query(request):
             productResult = {
                 'walMartstore': 'Walmart',
                 'walMarttitle': title,
-                'walMartprice': float(re.search(r'\$(\d+\.\d+)', price).group(1)) if float(re.search(r'\$(\d+\.\d+)', price).group(1)) is not None else price,
+                'walMartprice': float(re.search(r'\$(\d+\.\d+)', price).group(1)) if re.search(r'\$(\d+\.\d+)', price) is not None else price,
                 'walMartlink': link,
                 'walMartimgLink': imgLink,
                 'grade': 0,

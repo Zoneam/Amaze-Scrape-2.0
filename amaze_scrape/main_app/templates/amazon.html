@@ -3,49 +3,82 @@
   {% for product in compareResults %}
 
   <div class="card-wrapper">
-    <a target="_blank" href="https://amazon.com/{{ product.amazonlink }}">
-      <div class="inner-wrap" style="background-color: {% if product.amazonPrice > product.walMartprice %}#e5c7c7{% else %}#c7e5d1{% endif %};">
-        <div class="flex ">
+    <a class="link" target="_blank" href="https://amazon.com/{{ product.amazonlink }}">
+      <div
+        class="inner-wrap"
+        style="background-color: {% if product.amazonPrice > product.walMartprice %}#e5c7c7{% else %}#c7e5d1{% endif %};"
+      >
+        <div class="flex">
           <div class="relative">
             <div class="aspect-ratio aspect-ratio--1x1">
-              <img style="object-fit: contain; min-width: 160px" src="{{ product.amazonimgLink }}" width="160" height="160"/>
+              <img
+                style="object-fit: contain; min-width: 160px"
+                src="{{ product.amazonimgLink }}"
+                width="160"
+                height="160"
+              />
             </div>
           </div>
         </div>
         <div class="ml3 relative">
           <div class="w-100">
-            <div class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m">
-              <span class="w_iUH7">Amazon Price ${{ product.amazonPrice }}</span>
+            <div
+              class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m"
+            >
+              <span class="w_iUH7"
+                >Amazon Price ${{ product.amazonPrice }}</span
+              >
             </div>
-            <span><h3 class="title-h3">
-              {{ product.amazontitle }}
-              </h3></span>
+            <span><h3 class="title-h3">{{ product.amazontitle }}</h3></span>
           </div>
         </div>
       </div>
     </a>
 
     <div class="middle-info">
-      <span class="grade">Title Match {{ product.grade }}%</span>
+      <div class="progress mx-auto" data-value="{{ product.grade }}">
+        <span class="progress-left">
+          <span class="progress-bar border-primary"></span>
+        </span>
+        <span class="progress-right">
+          <span class="progress-bar border-primary"></span>
+        </span>
+        <div
+          class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center"
+        >
+          <div><span>Title Match</span></div>
+          <div class="h2 font-weight-bold">{{ product.grade }}%</div>
+        </div>
+      </div>
     </div>
 
-    <a target="_blank" href="https://walmart.com{{ product.walMartlink }}">
-      <div class="inner-wrap" style="background-color: {% if product.walMartprice > product.amazonPrice %}#e5c7c7{% else %}#c7e5d1{% endif %};">
-        <div class="flex ">
+    <a class="link" target="_blank" href="https://walmart.com{{ product.walMartlink }}">
+      <div
+        class="inner-wrap"
+        style="background-color: {% if product.walMartprice > product.amazonPrice %}#e5c7c7{% else %}#c7e5d1{% endif %};"
+      >
+        <div class="flex">
           <div class="relative">
             <div class="aspect-ratio aspect-ratio--1x1">
-              <img style="object-fit: contain; min-width: 160px" src="{{ product.walMartimgLink }}" width="160" height="160"/>
+              <img
+                style="object-fit: contain; min-width: 160px"
+                src="{{ product.walMartimgLink }}"
+                width="160"
+                height="160"
+              />
             </div>
           </div>
         </div>
         <div class="ml3 relative">
           <div class="w-100">
-            <div class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m">
-              <span class="w_iUH7">Wal-Mart Price ${{ product.walMartprice }}</span>
+            <div
+              class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m"
+            >
+              <span class="w_iUH7"
+                >Wal-Mart Price ${{ product.walMartprice }}</span
+              >
             </div>
-            <span><h3 class="title-h3">
-              {{ product.walMarttitle }}
-              </h3></span>
+            <span><h3 class="title-h3">{{ product.walMarttitle }}</h3></span>
           </div>
         </div>
       </div>
@@ -55,4 +88,3 @@
   {% endfor %}
 </div>
 {% endblock %}
-

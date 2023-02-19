@@ -1,5 +1,5 @@
 # run "source aliases.zsh" command first
-alias env="source ../env/bin/activate"
+alias env="source ../myenv/bin/activate"
 alias denv="deactivate"
 alias mmg="python manage.py makemigrations main_app"
 alias mg="python manage.py migrate"

@@ -1,8 +1,9 @@
 {% extends 'base.html' %} {% block content %}
+{% load static %}
 
   <div id="status-container">
       <lottie-player
-      src="../../../static/images/price-comparison.json"
+      src="{% static '/images/price-comparison.json' %}"
       background="transparent"
       speed="1"
       style="width: 105px"
@@ -12,22 +13,7 @@
     </lottie-player>
 
 
-    <div
-      id="spinner"
-      class=" hidden"
-      role="status"
-    >
-        <lottie-player
-        id="spinner"
-        src="../../../static/images/loading.json"
-        background="transparent"
-        speed="1"
-        style="width: 205px"
-        loop
-        autoplay
-      >
-      </lottie-player>
-    </div>
+
   </div>
 <form
   class="form-inline my-2 my-lg-0"
@@ -48,9 +34,25 @@
   </div>
 </form>
 
-
+<div
+id="spinner"
+class=" hidden"
+role="status"
+>
+  <lottie-player
+  id="spinner"
+  src="{% static '/images/loading.json' %}"
+  background="transparent"
+  speed="1"
+  style="width: 205px"
+  loop
+  autoplay
+>
+</lottie-player>
+</div>
 
 {% block amazon %} {% endblock %}
 {% block raleys %} {% endblock %}
+
 
 {% endblock %}
