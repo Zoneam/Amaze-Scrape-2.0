@@ -88,6 +88,7 @@ ALLOWED_HOSTS = ['*']
 #     }
 # }
 
+DATABASES = {
 'default': dj_database_url.config(default=os.environ['SQL_DATABASE'], conn_max_age=600)}
 
 
