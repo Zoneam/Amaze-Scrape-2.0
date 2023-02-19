@@ -282,7 +282,7 @@ def safeway_query(request):
     
     productResults = []
     options = Options()
-    # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     options.add_argument("--incognito")
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
