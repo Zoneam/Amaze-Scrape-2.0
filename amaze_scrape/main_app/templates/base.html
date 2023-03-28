@@ -82,23 +82,26 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a href="{% url 'raleys_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Raleys">
+                  <a href="{% url 'raleys_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0 logo-link" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Raleys">
                     <img class="store-logo" src="{% static 'images/raleys.png' %}" alt="walmart" width="70" height="70">
                   </a>
                 </li>
                 <li>
-                  <a href="{% url 'safeway_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0 p-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Safeway">
+                  <a href="{% url 'safeway_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0 p-0 logo-link" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Safeway">
                     <img class="store-logo" src="{% static 'images/safeway.png' %}" alt="walmart" width="70" height="70">
                   </a>
                 </li>
                 <li>
-                  <a href="{% url 'walmart_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Walmart">
+                  <a href="{% url 'walmart_query' %}" class="loading loading-top nav-link py-3 border-bottom mt-0 logo-link" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Walmart">
                     <img class="store-logo" src="{% static 'images/walmart.png' %}" alt="walmart" width="70" height="70">
                   </a>
                 </li>
               </ul>
             </li>
+            <li class="nav-item">
+             
             <a class="nav-link" href="{% url 'search' %}">Search and Compare</a>
+            </li>
           </div>
 
           <div id="login">

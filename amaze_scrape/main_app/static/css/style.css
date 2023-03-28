@@ -183,17 +183,7 @@ main {
 }
 
 
-@media only screen and (min-width: 992px) {
-  .navbar {
-    padding: 0;
-  }
-  .navbar .navbar-nav .nav-link {
-    padding: 1em 0.7em;
-  }
-  .navbar .navbar-brand {
-    padding: 0 0.8em;
-  }
-}
+
 
 .info-div {
   padding: 0 20px 20px 30px;
@@ -535,5 +525,44 @@ a {
 
   nav li {
     margin: 10px 0;
+  }  
+  
+  .wrapper {
+    flex-direction: column;
+    align-items: center !important;
   }
+
+  .nav-links{
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    font-size: small;
+  }
+
+  .store-logo{
+    width: 30px;
+    height: 30px;
+    padding: 0;
+  }
+
+  .logo-link{
+    padding: 0px !important;
+  }
+
+}
+
+@media only screen and (min-width: 992px) {
+  .navbar {
+    padding: 0;
+  }
+  .navbar .navbar-nav .nav-link {
+    padding: 1em 0.7em;
+  }
+  .navbar .navbar-brand {
+    padding: 0 0.8em;
+  }
+
+
+
+
 }
