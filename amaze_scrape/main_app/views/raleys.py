@@ -51,8 +51,7 @@ def raleys_query(request):
     options.add_argument('--disable-gpu')
     options.add_argument("--crash-dumps-dir=/tmp")
     options.add_argument("--disable-dev-shm-usage")
-    # driver = webdriver.Chrome(options=options)
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
     driver.get(f'https://shop.raleys.com/shop/categories/52?tags=on_sale')

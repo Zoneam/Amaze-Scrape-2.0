@@ -46,15 +46,13 @@ def safeway_query(request):
     
     productResults = []
     options = Options()
-    # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     options.add_argument("--incognito")
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument('--disable-gpu')
     options.add_argument("--crash-dumps-dir=/tmp")
     options.add_argument("--disable-dev-shm-usage")
-    # driver = webdriver.Chrome(options=options)
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     # Set the interceptor on the driver
     driver.request_interceptor = interceptor
     driver.get(f'https://www.safeway.com/shop/deals/member-specials.html')
