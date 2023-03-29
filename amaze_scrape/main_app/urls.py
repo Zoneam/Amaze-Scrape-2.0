@@ -7,13 +7,13 @@ from .views.walmart import walmart_query
 from .views.search_compare import search_compare
 from .views.raleys import raleys_query
 from .views.safeway import safeway_query
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('', views.search, name='search'),
     path('accounts/signup/', views.signup, name='signup'),
     path('login/', views.login, name='login'),
-    path('search/', views.search, name='search'),
     path('search_compare/', search_compare, name='search_compare'),
     path('raleys_query/', raleys_query, name='raleys_query'),
     path('walmart_query/', walmart_query, name='walmart_query'),
@@ -21,4 +21,5 @@ urlpatterns = [
     path('target_query/', target_query, name='target_query'),
     path('tradejoes_query/', views.traderjoes_query, name='traderjoes_query'),
     path('wholefoods_query/', views.wholefoods_query, name='wholefoods_query'),
+    path('<path:unknown>/', TemplateView.as_view(template_name='404.html')),
 ]
