@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load custom_filters %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -70,10 +70,7 @@
       >
       </lottie-player>
       <a class="navbar-brand" href="{% url 'search' %}">Amaze-Scrape 2.0</a>
-
-   
         <ul class="navbar-nav mr-auto nav-links">
-
           {% if user.is_authenticated %}
           <div id="action-items">
             <li class="nav-item dropdown">
@@ -109,7 +106,7 @@
               <a class="nav-link" href="{% url 'logout' %}" >Logout</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link username">{{ user }}</a>
+              <a class="nav-link username">{{ user|extract_username }}</a>
             </li>
           </div>
           {% else %}
@@ -121,7 +118,6 @@
           </li>
           {% endif %}
         </ul>
-
     </nav>
     <main  id="container-main">
 
