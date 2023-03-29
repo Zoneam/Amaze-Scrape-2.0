@@ -10,6 +10,7 @@ from .views.safeway import safeway_query
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),
+    path('', views.search, name='search'),
     path('accounts/signup/', views.signup, name='signup'),
     path('login/', views.login, name='login'),
     path('search/', views.search, name='search'),
