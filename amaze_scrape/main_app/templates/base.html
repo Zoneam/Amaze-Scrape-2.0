@@ -37,6 +37,7 @@
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
       crossorigin="anonymous"
     ></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script
       src="https://kit.fontawesome.com/99126f6578.js"
       crossorigin="anonymous"
@@ -101,6 +102,9 @@
              
             <a class="nav-link" href="{% url 'search' %}">Search and Compare</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'my_favorites' %}">Favorites</a>
+            </li>
           </div>
 
           <div id="login">
@@ -128,6 +132,7 @@
       {% block raleys %} {% endblock %}
       {% block safeway %} {% endblock %}
       {% block walmart %} {% endblock %}
+      {% block favorites %} {% endblock %}
 
     </div>
     </main>

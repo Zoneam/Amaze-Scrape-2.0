@@ -1,13 +1,10 @@
 {% extends 'search.html' %} {% block amazon %}
 <div id="search-results">
-  {% for product in compareResults %}
+  {% for product in compareResults%}
 
   <div class="card-wrapper">
     <a class="link" target="_blank" href="https://amazon.com/{{ product.amazonlink }}">
-      <div
-        class="inner-wrap"
-        style="background-color: {% if product.amazonPrice > product.walMartprice %}#e5c7c7{% else %}#c7e5d1{% endif %};"
-      >
+      <div class="inner-wrap" style="background-color: {% if product.amazonPrice > product.walMartprice %}#e5c7c7{% else %}#c7e5d1{% endif %};">
         <div class="flex">
           <div class="relative">
             <div class="aspect-ratio aspect-ratio--1x1">
@@ -50,7 +47,22 @@
           <div class="h2 font-weight-bold">{{ product.grade }}%</div>
         </div>
       </div>
+      <form class="add-product-to-favorites-form" method="post" >
+        {% csrf_token %}
+        <input type="hidden" name="wm_title" value="{{ product.walMarttitle }}" />
+        <input type="hidden" name="wm_price" value="{{ product.walMartprice }}" />
+        <input type="hidden" name="wm_link" value="{{ product.walMartlink }}" />
+        <input type="hidden" name="wm_imgLink" value="{{ product.walMartimgLink }}" />
+        <input type="hidden" name="amazon_title" value="{{ product.amazontitle }}" />
+        <input type="hidden" name="amazon_price" value="{{ product.amazonPrice }}" />
+        <input type="hidden" name="amazon_link" value="{{ product.amazonlink }}" />
+        <input type="hidden" name="amazon_imgLink" value="{{ product.amazonimgLink }}" />
+        <input type="hidden" name="grade" value="{{ product.grade }}" />
+        <input type="hidden" name="user" value="{{ user }}" />
+        <button type="submit" class="btn btn-warning">add</button>
+      </form>
     </div>
+
 
     <a class="link" target="_blank" href="https://walmart.com{{ product.walMartlink }}">
       <div
@@ -87,4 +99,35 @@
 
   {% endfor %}
 </div>
+
+
+
+{% block scripts %}
+<script>
+  $(document).ready(function() {
+    $('.add-product-to-favorites-form').submit(function(event) {
+      event.preventDefault();  // prevent the form from submitting normally
+      var form = $(this);
+      var button = form.find('button[type=submit]');
+      $.ajax({
+        url: "{% url 'favorite' %}",
+        type: "POST",
+        data: form.serialize(),
+        dataType: "json",
+        success: function(data) {
+          if (data.success) {
+            button.text('Added');
+            button.attr('disabled', true);
+          } else {
+            alert('Failed to add product to favorites.');
+          }
+        },
+        error: function() {
+          alert('Failed to add product to favorites.');
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from bs4 import BeautifulSoup
-from ..models import Product, Store
+from ..models.deals import Product, Store
 # from selenium import webdriver
 from seleniumwire import webdriver
 from selenium.webdriver.chrome.options import Options

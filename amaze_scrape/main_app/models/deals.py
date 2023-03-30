@@ -1,10 +1,4 @@
 from django.db import models
-from django.urls import reverse
-from datetime import date
-from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.db.models import Sum
-from django.contrib.postgres.fields import ArrayField
 from datetime import datetime
 
 class Store(models.Model):
@@ -30,7 +24,7 @@ class Product(models.Model):
     
     def __str__(self):
         return self.store.name
-
+    
 # class Price(models.Model):
 #     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product')
 #     price = models.FloatField(null=True, blank=True)

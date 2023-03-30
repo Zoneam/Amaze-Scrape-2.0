@@ -1,5 +1,6 @@
 import re
 import math
+from ..models.favorites import Wm_Product, Amazon_Product, Favorite
 from django.shortcuts import render, redirect
 from bs4 import BeautifulSoup
 import requests
@@ -9,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromiumService
 from webdriver_manager.core.utils import ChromeType
+from django.http import JsonResponse
+from ..forms import ProductForm
 
 HEADERS = ({ 
       'user-agent': 'Mozilla/5.0 (Windows NT 16.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.132 Safari/537.36',
@@ -112,7 +115,6 @@ def search_compare(request):
 # -------------------- Walmart Block start --------------------------------
 
     for idx, amazonProductResult in enumerate(amazonProductResults[:8]):
-        print(idx, amazonProductResult['amazontitle'])
         target_url=f"https://www.walmart.com/search?q={amazonProductResult['amazontitle']}"
         resp = requests.get(target_url, headers=HEADERSWM)
         # time.sleep(2)
@@ -140,9 +142,55 @@ def search_compare(request):
         sorted_WalMart_list = sorted(wmProductResults, key=lambda x: x['grade'], reverse=True)
         
         if sorted_WalMart_list[0]['grade'] > 30:
-            print('>>>>>>>>> Match %',  sorted_WalMart_list[0]['grade'])
+            # print('>>>>>>>>> Match %',  sorted_WalMart_list[0]['grade'])
             compareResults.append({**amazonProductResult, **sorted_WalMart_list[0]})
     # -------------------- Walmart Block end --------------------
     sortedCompareResults = sorted(compareResults, key=lambda x: x['grade'], reverse=True)
 
     return render(request, 'amazon.html', {'compareResults': sortedCompareResults})
+
+
+
+@login_required
+def favorite(request):
+    if request.method == 'POST':
+        wm_title = request.POST.get('wm_title')
+        wm_price = request.POST.get('wm_price')
+        wm_link = request.POST.get('wm_link')
+        wm_imgLink = request.POST.get('wm_imgLink')
+        amazon_title = request.POST.get('amazon_title')
+        amazon_price = request.POST.get('amazon_price')
+        amazon_link = request.POST.get('amazon_link')
+        amazon_imgLink = request.POST.get('amazon_imgLink')
+        grade = request.POST.get('grade')
+
+        amazon_product = Amazon_Product.objects.create(
+            amazon_title=amazon_title,
+            amazon_price=amazon_price,
+            amazon_link=amazon_link,
+            amazon_imgLink=amazon_imgLink,
+            
+        )
+
+        # Create a new Walmart product
+        wm_product = Wm_Product.objects.create(
+            wm_title=wm_title,
+            wm_price=wm_price,
+            wm_link=wm_link,
+            wm_imgLink=wm_imgLink,
+            grade=grade
+        )
+
+        # Add both products to the user's favorites
+        Favorite.objects.create(
+            user=request.user,
+            amazon_product=amazon_product,
+            wm_product=wm_product,
+        )
+
+    return JsonResponse({'success': True})
+
+@login_required
+def my_favorites(request):
+    favorites = Favorite.objects.filter(user=request.user)
+    return render(request, 'favorites.html', {'favorites': favorites})
