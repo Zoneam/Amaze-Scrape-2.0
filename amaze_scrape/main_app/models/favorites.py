@@ -23,9 +23,9 @@ class Amazon_Product(models.Model):
         return self.title
 
 class Favorite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
-    wm_product = models.ForeignKey(Wm_Product, on_delete=models.CASCADE, related_name='wm_product')
-    amazon_product = models.ForeignKey(Amazon_Product, on_delete=models.CASCADE, related_name='amazon_product')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    wm_product = models.ForeignKey(Wm_Product, on_delete=models.CASCADE, related_name='favorites')
+    amazon_product = models.ForeignKey(Amazon_Product, on_delete=models.CASCADE, related_name='favorites')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

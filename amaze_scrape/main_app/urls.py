@@ -7,6 +7,7 @@ from .views.walmart import walmart_query
 from .views.search_compare import search_compare
 from .views.search_compare import favorite
 from .views.search_compare import my_favorites
+from .views.search_compare import unfavorite
 from .views.raleys import raleys_query
 from .views.safeway import safeway_query
 from django.views.generic import TemplateView
@@ -25,5 +26,6 @@ urlpatterns = [
     path('wholefoods_query/', views.wholefoods_query, name='wholefoods_query'),
     path('favorites/', favorite, name='favorite'),
     path('my_favorites/', my_favorites, name='my_favorites'),
+    path('unfavorite/', unfavorite, name='unfavorite'),
     path('<path:unknown>/', TemplateView.as_view(template_name='404.html')),
 ]

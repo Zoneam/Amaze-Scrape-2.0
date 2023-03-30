@@ -48,6 +48,11 @@
               <div class="h2 font-weight-bold">{{ favorite.wm_product.grade }}%</div>
             </div>
           </div>
+          <form class="remove-product-from-favorites-form" method="post" >
+            {% csrf_token %}
+            <input type="hidden" name="favorite_id" value="{{ favorite.id }}">
+            <button type="submit" class="btn btn-warning">remove</button>
+          </form>
         </div>
     
     
@@ -86,4 +91,38 @@
     {% endfor %}
   </div>
 
-  {% endblock %}
+  {% block scripts %}
+  <script>
+    $(document).ready(function() {
+      $('.remove-product-from-favorites-form').submit(function(event) {
+        event.preventDefault();  // prevent the form from submitting normally
+        var form = $(this);
+        var button = form.find('button[type=submit]');
+        var productId = form.find('input[name="favorite_id"]').val();
+        var csrfToken = form.find('input[name="csrfmiddlewaretoken"]').val(); 
+        console.log(productId,'dfdfdf',csrfToken);
+        $.ajax({
+          url: "{% url 'unfavorite' %}?favorite_id=" + productId,
+          type: "DELETE",
+          processData: true,
+          data: {
+            csrfmiddlewaretoken: csrfToken, // include the CSRF token in the request
+          },
+          dataType: "json",
+          success: function(data) {
+            if (data.success) {
+              button.text('Removed');
+              button.attr('disabled', true);
+            } else {
+                console.log('Failed to remove product from favorites.');
+            }
+          },
+          error: function() {
+            console.log('Failed to remove product from favorites.');
+          }
+        });
+      });
+    });
+  </script>
+{% endblock %}
+{% endblock %}

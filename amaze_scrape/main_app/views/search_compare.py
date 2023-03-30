@@ -12,6 +12,8 @@ from selenium.webdriver.chrome.service import Service as ChromiumService
 from webdriver_manager.core.utils import ChromeType
 from django.http import JsonResponse
 from ..forms import ProductForm
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 
 HEADERS = ({ 
       'user-agent': 'Mozilla/5.0 (Windows NT 16.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.132 Safari/537.36',
@@ -194,3 +196,16 @@ def favorite(request):
 def my_favorites(request):
     favorites = Favorite.objects.filter(user=request.user)
     return render(request, 'favorites.html', {'favorites': favorites})
+
+@csrf_exempt
+@login_required
+def unfavorite(request):
+    if request.method == 'DELETE':
+        favorite_id = request.GET.get('favorite_id')
+        favorite = get_object_or_404(Favorite, id=favorite_id)
+        Amazon_Product.objects.filter(id=favorite.amazon_product.id).delete()
+        Wm_Product.objects.filter(id=favorite.wm_product.id).delete()
+        favorite.delete()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
