@@ -83,12 +83,9 @@
         </div>
         <div class="ml3 relative">
           <div class="w-100">
-            <div
-              class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m"
-            >
+            <div class="flex flex-wrap justify-start items-center lh-title mb2 mb1-m">
               <span class="w_iUH7"
-                >Wal-Mart Price ${{ product.walMartprice }}</span
-              >
+                >Wal-Mart Price ${{ product.walMartprice }}</span>
             </div>
             <span><h3 class="title-h3">{{ product.walMarttitle }}</h3></span>
           </div>
@@ -100,26 +97,44 @@
   {% endfor %}
 </div>
 
-{% if compareResults.has_other_pages %}
-  <div class="pagination">
-    <span class="step-links">
-        {% if compareResults.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ compareResults.previous_page_number }}">previous</a>
+<!-- Pagination -->
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    {% if compareResults.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ compareResults.previous_page_number }}">Previous</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+      </li>
+    {% endif %}
+
+    {% for i in compareResults.paginator.page_range %}
+      {% if forloop.first or forloop.last or i == compareResults.number or i == compareResults.number|add:"-1" or i == compareResults.number|add:"1" %}
+        {% if compareResults.number == i %}
+          <li class="page-item active" aria-current="page">
+            <a class="page-link" href="#">{{ i }}</a>
+          </li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
         {% endif %}
+      {% elif i == compareResults.number|add:"-2" or i == compareResults.number|add:"2" %}
+        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+      {% endif %}
+    {% endfor %}
 
-        <span class="current">
-            Page {{ compareResults.number }} of {{ compareResults.paginator.num_pages }}.
-        </span>
-
-        {% if compareResults.has_next %}
-            <a href="?page={{ compareResults.next_page_number }}">next</a>
-            <a href="?page={{ compareResults.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
-  </div>
-{% endif %}
-
+    {% if compareResults.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ compareResults.next_page_number }}">Next</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
 
 {% block scripts %}
 <script>

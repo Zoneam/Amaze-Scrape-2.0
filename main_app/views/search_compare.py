@@ -72,6 +72,7 @@ def matching_words_percentage(s1, s2):
 @login_required
 def search_compare(request):
     page = request.GET.get('page')
+    # Checking if there is a page number to pull data from user session
     if not page:
         wmProductResults = []
         amazonProductResults = []
@@ -84,8 +85,7 @@ def search_compare(request):
         options.headless = True
         
         driver = webdriver.Chrome(service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),options=options)
-        # driver = webdriver.Chrome()
-        # Set the interceptor on the driver
+        # Setting interceptor on the driver to inject headers
         driver.request_interceptor = interceptor
         driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
         
@@ -156,7 +156,7 @@ def search_compare(request):
         # Use the stored results for pagination
         sortedCompareResults = request.session.get('sortedCompareResults', [])
 
-    paginator = Paginator(sortedCompareResults, 2)  # Show # items per page
+    paginator = Paginator(sortedCompareResults, 5)  # Show # items per page
     compareResults_page = paginator.get_page(page)
     return render(request, 'amazon.html', {'compareResults': compareResults_page})
 
