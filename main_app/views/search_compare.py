@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from ..forms import ProductForm
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 
 HEADERS = ({ 
       'user-agent': 'Mozilla/5.0 (Windows NT 16.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.132 Safari/537.36',
@@ -70,86 +71,94 @@ def matching_words_percentage(s1, s2):
 
 @login_required
 def search_compare(request):
-
-    wmProductResults = []
-    amazonProductResults = []
-    compareResults = []
-    queryset = request.GET.get("search")
-    if not queryset:
-        return redirect('search')
-    options = Options()
-    options.add_argument("--incognito")
-    options.headless = True
-    
-    driver = webdriver.Chrome(service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),options=options)
-    # driver = webdriver.Chrome()
-    # Set the interceptor on the driver
-    driver.request_interceptor = interceptor
-    driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
-    
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-    # foundAsBot =  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "buy-now-button")))
-    if soup.find('title').text == 'Sorry! Something went wrong!':
-        print('\033[48;5;225m\033[38;5;245m Sorry! Something went wrong! \033[0;0m')
-    else:
-        raw_results = soup.find_all( class_ = "s-asin")
-        if raw_results:
-            for idx, result in enumerate(raw_results[:8]):
-                # print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m", result)
-                title = result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal").text if result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal") is not None else ''
-                if not title:
-                    title = result.find('span', class_ = "a-size-medium a-color-base a-text-normal").text if result.find('span', class_ = "a-size-medium a-color-base a-text-normal") is not None else ''
-                whole = result.find('span', class_ = 'a-price-whole').text if result.find('span', class_ = 'a-price-whole') is not None else ''
-                fraction = result.find('span', class_ = 'a-price-fraction').text if result.find('span', class_ = 'a-price-fraction') is not None else ''
-                imgLink = result.find('img', class_ = "s-image")['src'] if result.find('img', class_ = "s-image") is not None else ''
-                link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
-                productResult = {
-                    'amazonPrice': float(whole + fraction) if isfloat(whole + fraction) else (whole + fraction),
-                    'amazontitle': title,
-                    'amazonimgLink': imgLink,
-                    'amazonlink': link,
-                }
-                amazonProductResults.append(productResult)
+    page = request.GET.get('page')
+    if not page:
+        wmProductResults = []
+        amazonProductResults = []
+        compareResults = []
+        queryset = request.GET.get("search")
+        # if not queryset:
+        #     return redirect('search')
+        options = Options()
+        options.add_argument("--incognito")
+        options.headless = True
+        
+        driver = webdriver.Chrome(service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),options=options)
+        # driver = webdriver.Chrome()
+        # Set the interceptor on the driver
+        driver.request_interceptor = interceptor
+        driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
+        
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        # foundAsBot =  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "buy-now-button")))
+        if soup.find('title').text == 'Sorry! Something went wrong!':
+            print('\033[48;5;225m\033[38;5;245m Sorry! Something went wrong! \033[0;0m')
         else:
-            print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
-    driver.close()
+            raw_results = soup.find_all( class_ = "s-asin")
+            if raw_results:
+                for idx, result in enumerate(raw_results[:8]):
+                    # print(f"\033[48;5;225m\033[38;5;245m -------------{idx+1}---------- \033[0;0m", result)
+                    title = result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal").text if result.find('span', class_ = "a-size-base-plus a-color-base a-text-normal") is not None else ''
+                    if not title:
+                        title = result.find('span', class_ = "a-size-medium a-color-base a-text-normal").text if result.find('span', class_ = "a-size-medium a-color-base a-text-normal") is not None else ''
+                    whole = result.find('span', class_ = 'a-price-whole').text if result.find('span', class_ = 'a-price-whole') is not None else ''
+                    fraction = result.find('span', class_ = 'a-price-fraction').text if result.find('span', class_ = 'a-price-fraction') is not None else ''
+                    imgLink = result.find('img', class_ = "s-image")['src'] if result.find('img', class_ = "s-image") is not None else ''
+                    link = result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")['href'] if result.find('a', class_ = "a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal") is not None else ''
+                    productResult = {
+                        'amazonPrice': float(whole + fraction) if isfloat(whole + fraction) else (whole + fraction),
+                        'amazontitle': title,
+                        'amazonimgLink': imgLink,
+                        'amazonlink': link,
+                    }
+                    amazonProductResults.append(productResult)
+            else:
+                print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
+        driver.close()
 
-# -------------------- Walmart Block start --------------------------------
+    # -------------------- Walmart Block start --------------------------------
 
-    for idx, amazonProductResult in enumerate(amazonProductResults[:8]):
-        target_url=f"https://www.walmart.com/search?q={amazonProductResult['amazontitle']}"
-        resp = requests.get(target_url, headers=HEADERSWM)
-        # time.sleep(2)
-        soup = BeautifulSoup(resp.text, 'html.parser')
-        products = soup.findAll("div", class_ = "pa0-xl")
+        for idx, amazonProductResult in enumerate(amazonProductResults[:8]):
+            target_url=f"https://www.walmart.com/search?q={amazonProductResult['amazontitle']}"
+            resp = requests.get(target_url, headers=HEADERSWM)
+            # time.sleep(2)
+            soup = BeautifulSoup(resp.text, 'html.parser')
+            products = soup.findAll("div", class_ = "pa0-xl")
 
-        for idx, product in enumerate(products):
-            title = product.find('span', attrs={"data-automation-id": "product-title"}).text if product.find('span', attrs={"data-automation-id": "product-title"}) is not None else ''
-            price = product.find('div', attrs={"data-automation-id": "product-price"}).findChildren()[0].text if product.find('div', attrs={"data-automation-id": "product-price"}) is not None else ''
-            link = (product.find('a')["href"] if product.find('a')["href"] is not None else '')
-            imgLink = (product.find('img')["src"] if product.find('img')["src"] is not None else '')
-            productResult = {
-                'walMartstore': 'Walmart',
-                'walMarttitle': title,
-                'walMartprice': float(re.search(r'\$(\d+\.\d+)', price).group(1)) if re.search(r'\$(\d+\.\d+)', price) is not None else price,
-                'walMartlink': link,
-                'walMartimgLink': imgLink,
-                'grade': 0,
-            }
-            wmProductResults.append(productResult)
+            for idx, product in enumerate(products):
+                title = product.find('span', attrs={"data-automation-id": "product-title"}).text if product.find('span', attrs={"data-automation-id": "product-title"}) is not None else ''
+                price = product.find('div', attrs={"data-automation-id": "product-price"}).findChildren()[0].text if product.find('div', attrs={"data-automation-id": "product-price"}) is not None else ''
+                link = (product.find('a')["href"] if product.find('a')["href"] is not None else '')
+                imgLink = (product.find('img')["src"] if product.find('img')["src"] is not None else '')
+                productResult = {
+                    'walMartstore': 'Walmart',
+                    'walMarttitle': title,
+                    'walMartprice': float(re.search(r'\$(\d+\.\d+)', price).group(1)) if re.search(r'\$(\d+\.\d+)', price) is not None else price,
+                    'walMartlink': link,
+                    'walMartimgLink': imgLink,
+                    'grade': 0,
+                }
+                wmProductResults.append(productResult)
+                
+            for idx, wmProductResult in enumerate(wmProductResults):
+                wmProductResult['grade'] = math.floor(matching_words_percentage(amazonProductResult['amazontitle'], wmProductResult['walMarttitle']))
             
-        for idx, wmProductResult in enumerate(wmProductResults):
-            wmProductResult['grade'] = math.floor(matching_words_percentage(amazonProductResult['amazontitle'], wmProductResult['walMarttitle']))
-        
-        sorted_WalMart_list = sorted(wmProductResults, key=lambda x: x['grade'], reverse=True)
-        
-        if sorted_WalMart_list[0]['grade'] > 30:
-            # print('>>>>>>>>> Match %',  sorted_WalMart_list[0]['grade'])
-            compareResults.append({**amazonProductResult, **sorted_WalMart_list[0]})
-    # -------------------- Walmart Block end --------------------
-    sortedCompareResults = sorted(compareResults, key=lambda x: x['grade'], reverse=True)
+            sorted_WalMart_list = sorted(wmProductResults, key=lambda x: x['grade'], reverse=True)
+            
+            if sorted_WalMart_list[0]['grade'] > 30:
+                # print('>>>>>>>>> Match %',  sorted_WalMart_list[0]['grade'])
+                compareResults.append({**amazonProductResult, **sorted_WalMart_list[0]})
+        # -------------------- Walmart Block end --------------------
+        sortedCompareResults = sorted(compareResults, key=lambda x: x['grade'], reverse=True)
+        # Store the sortedCompareResults in the session for pagination purposes
+        request.session['sortedCompareResults'] = sortedCompareResults
+    else:
+        # Use the stored results for pagination
+        sortedCompareResults = request.session.get('sortedCompareResults', [])
 
-    return render(request, 'amazon.html', {'compareResults': sortedCompareResults})
+    paginator = Paginator(sortedCompareResults, 2)  # Show # items per page
+    compareResults_page = paginator.get_page(page)
+    return render(request, 'amazon.html', {'compareResults': compareResults_page})
 
 
 
