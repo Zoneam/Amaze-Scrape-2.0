@@ -223,6 +223,6 @@ def unfavorite(request):
         Amazon_Product.objects.filter(id=favorite.amazon_product.id).delete()
         Wm_Product.objects.filter(id=favorite.wm_product.id).delete()
         favorite.delete()
-        return JsonResponse({'success': True})
+        return JsonResponse({'success': True, 'deleted_favorite_id': favorite_id})
     else:
         return JsonResponse({'success': False})

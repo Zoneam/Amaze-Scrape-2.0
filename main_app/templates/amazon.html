@@ -59,7 +59,7 @@
         <input type="hidden" name="amazon_imgLink" value="{{ product.amazonimgLink }}" />
         <input type="hidden" name="grade" value="{{ product.grade }}" />
         <input type="hidden" name="user" value="{{ user }}" />
-        <button type="submit" class="btn btn-warning">add</button>
+        <button type="submit" class="btn btn-warning">Save</button>
       </form>
     </div>
 
@@ -150,7 +150,7 @@
         dataType: "json",
         success: function(data) {
           if (data.success) {
-            button.text('Added');
+            button.text('Saved');
             button.attr('disabled', true);
           } else {
             alert('Failed to add product to favorites.');

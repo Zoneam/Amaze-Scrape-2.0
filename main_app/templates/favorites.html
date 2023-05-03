@@ -1,9 +1,10 @@
 {% extends 'base.html' %} {% block favorites %}
 
 <div id="search-results">
+  {% if favorites %}
     {% for favorite in favorites %}
   
-    <div class="card-wrapper">
+    <div class="card-wrapper" id="favorite-{{ favorite.id }}">
         <a class="link" target="_blank" href="https://amazon.com/{{ favorite.amazon_product.amazon_link }}">
           <div class="inner-wrap" style="background-color: {% if favorite.amazon_product.amazon_price > favorite.wm_product.wm_price %}#e5c7c7{% else %}#c7e5d1{% endif %};">
             <div class="flex">
@@ -89,6 +90,22 @@
         </a>
       </div>
     {% endfor %}
+  {% else %}
+
+    <span style="width: 236px; position: relative;top: 41px;display:inline-block;">
+      <lottie-player
+        style="margin: auto"
+        src="../static/no_data.json"
+        background="transparent"
+        speed="1"
+        style="width: 100px; height: 100px"
+        loop
+        autoplay
+      >
+      </lottie-player>
+    </span>
+
+  {% endif %}
   </div>
 
   {% block scripts %}
@@ -100,7 +117,6 @@
         var button = form.find('button[type=submit]');
         var productId = form.find('input[name="favorite_id"]').val();
         var csrfToken = form.find('input[name="csrfmiddlewaretoken"]').val(); 
-        console.log(productId,'dfdfdf',csrfToken);
         $.ajax({
           url: "{% url 'unfavorite' %}?favorite_id=" + productId,
           type: "DELETE",
@@ -111,8 +127,11 @@
           dataType: "json",
           success: function(data) {
             if (data.success) {
+              // removing the product from the DOM
               button.text('Removed');
               button.attr('disabled', true);
+              console.log('Product removed from favorites.', data.deleted_favorite_id)
+              $('#favorite-' + data.deleted_favorite_id).remove();
             } else {
                 console.log('Failed to remove product from favorites.');
             }
