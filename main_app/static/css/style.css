@@ -262,10 +262,10 @@ main {
   justify-content: center;
 }
 
-.card-title {
+/* .card-title {
   overflow-wrap: break-word;
   margin-left: 10px;
-}
+} */
 
 .card {
   width: 365px;

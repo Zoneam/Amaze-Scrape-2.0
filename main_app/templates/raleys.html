@@ -1,29 +1,66 @@
 {% extends 'base.html' %} {% block raleys %}
-  <div class="row">
-    <div class="col-lg-8 mx-auto">
-        <!-- List group-->
-        <ul class="list-group shadow">
+
+  <style>
+    .product-card {
+      width: 90%;
+      margin: 0 auto;
+      position: relative;
+    }
+    .product-discount-badge {
+      -webkit-box-shadow: 5px 7px 15px -2px rgba(0,0,0,0.8); 
+      box-shadow: 5px 7px 15px -2px rgba(0,0,0,0.8);
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 1;
+    }
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 100%;
+    }
+    .price-info {
+      display: flex;
+      align-items: baseline;
+    }
+    .now-price {
+      font-size: 1.2rem;
+      color: #28a745;
+      margin-right: 10px;
+    }
+    .was-price {
+      font-size: 1rem;
+      color: #6c757d;
+      text-decoration: line-through;
+    }
+  </style>
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 gy-4 gx-2">
   {% for product in productResults %}
-      <a href='{{ product.link }}' target='_blank}'>
-            <!-- list group item-->
-            <li class="list-group-item my-2">
-                <!-- Custom content-->
-                <span class="product-discount-label">-{{ product.discount }} %</span>
-                <div class="media flex-column flex-lg-row wrapper" title="{{product.title}}">
-                  <img src="{{ product.imgLink }}" alt="Generic placeholder image" width="200" class="ml-lg-5">
-                    <div class="media-body">
-                        <h5 class="mt-0 font-weight-bold mb-2">
-                          {% if product.title|length < 50 %} {{ product.title }} {% else %}
-                          {{ product.title|slice:":50" }}... {% endif %}</h5>
-                        <div class="d-flex align-items-center justify-content-between mt-1">
-                          <h4 class="mr-1">Now: {{ product.current }}</h4><h6>Was: <span class="strike-text">{{  product.was }}</span></h6>
-                        </div>
-                    </div>
-                </div> <!-- End -->
-            </li> <!-- End -->
-            </a>
+      <div class="col">
+        <a href='{{ product.link }}' target='_blank' class="text-decoration-none">
+          <div class="card shadow h-100 product-card">
+            <span class="badge bg-danger text-white mb-2 product-discount-badge">-{{ product.discount }} %</span>
+            <img src="{{ product.imgLink }}" class="card-img-top" alt="Generic placeholder image">
+            <div class="card-body">
+              <p class="card-title font-weight-bold">
+                {% if product.title|length < 50 %} {{ product.title }} {% else %}
+                {{ product.title|slice:":50" }}... {% endif %}
+              </p>
+              <div class="price-info">
+                <p class="now-price">Now: {{ product.current }}</p>
+                <h6 class="was-price">Was: {{ product.was }}</h6>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
   {% endfor %}
-</ul> <!-- End -->
-</div>
-</div>
+    </div>
+  </div>
 {% endblock %}
+
+
+
+

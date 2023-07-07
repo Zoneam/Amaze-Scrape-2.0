@@ -63,18 +63,22 @@ def safeway_query(request):
         for idx,result in enumerate(raw_results):
             title = result.find('a', class_ = "product-title__name").text if result.find('a', class_ = "product-title__name") is not None else ''
             was = '.'.join(re.findall(r'\d+', result.find('del', class_ = 'product-price__baseprice').text)) if result.find('del', class_ = 'product-price__baseprice') is not None else ''
+            
             current = '.'.join(re.findall(r'\d+', result.find('span', class_ = 'product-price__discounted-price').text))  if result.find('span', class_ = 'product-price__discounted-price') is not None else ''
             aTag = result.find('a') if result.find('a') is not None else ''
+            current = current.split(".")[0] + '.' + current.split(".")[1]
+            print(was)
             productResult = {
                 'store': store,
                 'was': was,
                 'current': current,
                 'title': title,
                 'imgLink': f'https://images.albertsons-media.com/is/image/ABS/{aTag["data-bpn"]}?$ecom-product-card-tablet-jpg$&defaultImage=Not_Available',
-                'discount': round((1 - (float(current) / float(was))) * 100, 2),
+                'discount': round((1 - (float(current) / float(was))) * 100, 2) if current.replace('.', '', 1).isdigit() and was.replace('.', '', 1).isdigit() else '0',
                 'link': f'https://www.safeway.com{aTag["href"]}',
             }
             productResults.append(productResult)
+            print(productResult)
     else:
         print("\033[48;5;225m\033[38;5;245m -- No results -- \033[0;0m")
     driver.close()
