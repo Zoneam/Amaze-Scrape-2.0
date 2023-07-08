@@ -102,6 +102,7 @@ def amazon_product_search(request,):
     driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
     
     soup = BeautifulSoup(driver.page_source, 'html.parser')
+    print('>>>>>>>>> soup', soup)
     # foundAsBot =  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "buy-now-button")))
     if soup.find('title').text == 'Sorry! Something went wrong!':
         print('\033[48;5;225m\033[38;5;245m Sorry! Something went wrong! \033[0;0m')
@@ -140,6 +141,7 @@ def walmart_compare_results(amazon_product_results):
         resp = requests.get(target_url, headers=HEADERSWM)
         # time.sleep(2)
         soup = BeautifulSoup(resp.text, 'html.parser')
+        print('>>>>>>>>> soupWM', soup)
         products = soup.findAll("div", class_ = "pa0-xl")
 
         for idx, product in enumerate(products):
