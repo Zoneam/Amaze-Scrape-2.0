@@ -90,7 +90,6 @@ def amazon_product_search(request,):
     driver.get(f'https://www.amazon.com/s?k={queryset}&ref=nb_sb_noss')
     
     soup = BeautifulSoup(driver.page_source, 'html.parser')
-    print('>>>>>>>>> soup', soup)
     # foundAsBot =  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "buy-now-button")))
     if soup.find('title').text == 'Sorry! Something went wrong!':
         print('\033[48;5;225m\033[38;5;245m Sorry! Something went wrong! \033[0;0m')
@@ -129,7 +128,6 @@ def walmart_compare_results(amazon_product_results):
         resp = requests.get(target_url, headers=HEADERSWM)
         # time.sleep(2)
         soup = BeautifulSoup(resp.text, 'html.parser')
-        print('>>>>>>>>> soupWM', soup)
         products = soup.findAll("div", class_ = "pa0-xl")
 
         for idx, product in enumerate(products):
@@ -151,10 +149,8 @@ def walmart_compare_results(amazon_product_results):
             wmproduct_result['grade'] = math.floor(matching_words_percentage(amazon_product_result['amazontitle'], wmproduct_result['walMarttitle']))
         
         sorted_WalMart_list = sorted(wm_product_results, key=lambda x: x['grade'], reverse=True)
-        print('>>>>>>>>> sorted_WalMart_list', sorted_WalMart_list)
         if sorted_WalMart_list:
             if sorted_WalMart_list[0]['grade'] > 30:
-                print('>>>>>>>>> Match %',  sorted_WalMart_list[0]['grade'])
                 compare_results.append({**amazon_product_result, **sorted_WalMart_list[0]})
     # -------------------- Walmart Block end --------------------
     sorted_compare_results = sorted(compare_results, key=lambda x: x['grade'], reverse=True)
