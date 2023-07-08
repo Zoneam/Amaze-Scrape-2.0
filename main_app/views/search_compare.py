@@ -35,7 +35,7 @@ HEADERSWM = ({
     'sheme': 'https',
     'cache-control': 'max-age=0',
     'referer': 'https://www.walmart.com/',
-    'sec-ch-ua': '"Not_A Brand";v="99", "Google Chrome";v="109", "Chromium";v="109"',
+    'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-platform': '"macOS"',
     'sec-fetch-dest': 'document',
