@@ -161,9 +161,9 @@ def walmart_compare_results(amazon_product_results):
             wmproduct_result['grade'] = math.floor(matching_words_percentage(amazon_product_result['amazontitle'], wmproduct_result['walMarttitle']))
         
         sorted_WalMart_list = sorted(wm_product_results, key=lambda x: x['grade'], reverse=True)
-        
+        print('>>>>>>>>> sorted_WalMart_list', sorted_WalMart_list)
         if sorted_WalMart_list[0]['grade'] > 30:
-            # print('>>>>>>>>> Match %',  sorted_WalMart_list[0]['grade'])
+            print('>>>>>>>>> Match %',  sorted_WalMart_list[0]['grade'])
             compare_results.append({**amazon_product_result, **sorted_WalMart_list[0]})
     # -------------------- Walmart Block end --------------------
     sorted_compare_results = sorted(compare_results, key=lambda x: x['grade'], reverse=True)
