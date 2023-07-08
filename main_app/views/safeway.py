@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 from ..models.deals import Product, Store
 # from selenium import webdriver
-from seleniumwire import webdriver
+# from seleniumwire import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC

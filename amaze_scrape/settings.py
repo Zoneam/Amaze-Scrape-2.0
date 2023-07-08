@@ -89,7 +89,27 @@ ALLOWED_HOSTS = ['*']
 #     }
 # }
 
-DATABASES = {'default': dj_database_url.config(default=os.environ['SQL_DATABASE'], engine='django_cockroachdb')}
+# DATABASES = {
+# 'default': dj_database_url.config(default=os.environ['SQL_DATABASE'], conn_max_age=600)}
+DATABASES = {
+    'default': dj_database_url.config(default=os.environ['SQL_DATABASE'],
+     engine='django_cockroachdb'
+     )}
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django_cockroachdb',
+#         'NAME': '{database}',
+#         'USER': '{username}',
+#         'PASSWORD': '{password}',
+#         'HOST': '{host}',
+#         'PORT': '{port}',
+#         'OPTIONS': {
+#             'sslmode': 'verify-full',
+#             'sslrootcert': os.path.expandvars('{root-cert}'),
+#         },
+#     },
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
